@@ -1,0 +1,122 @@
+\babel@toc {french}{}\relax 
+\contentsline {chapter}{Introduction Générale}{6}{chapter*.4}%
+\contentsline {chapter}{\numberline {1}Présentation du cadre de projet}{7}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introduction}{7}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Étude de l'existant}{7}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Authentification par identifiant et mot de passe}{8}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Authentification à deux facteurs (2FA)}{8}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Systèmes de contrôle d'accès basés sur les rôles (RBAC)}{8}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Solutions biométriques existantes}{9}{subsection.1.2.4}%
+\contentsline {section}{\numberline {1.3}Analyse critique de l'existant}{9}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Vulnérabilités de l'authentification traditionnelle}{9}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Limites des approches 2FA actuelles}{9}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Rigidité des modèles de contrôle d'accès}{10}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.3.4}Fragmentation des solutions de sécurité}{10}{subsection.1.3.4}%
+\contentsline {section}{\numberline {1.4}Solution proposée}{10}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Principe général}{10}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Avantages de la solution}{11}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Limites et contraintes}{11}{subsection.1.4.3}%
+\contentsline {section}{\numberline {1.5}Choix du modèle de développement}{12}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Modèles envisagés}{12}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Justification du choix}{12}{subsection.1.5.2}%
+\contentsline {section}{\numberline {1.6}Planning prévisionnel}{13}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Conclusion}{13}{section.1.7}%
+\contentsline {chapter}{\numberline {2}Spécification des besoins}{15}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{15}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Identification des acteurs}{15}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Acteurs primaires}{16}{subsection.2.2.1}%
+\contentsline {subsubsection}{Visiteur}{16}{section*.5}%
+\contentsline {subsubsection}{Utilisateur authentifié}{16}{section*.6}%
+\contentsline {subsubsection}{Administrateur}{16}{section*.7}%
+\contentsline {subsection}{\numberline {2.2.2}Acteurs secondaires}{17}{subsection.2.2.2}%
+\contentsline {subsubsection}{Service OTP}{17}{section*.8}%
+\contentsline {subsubsection}{Service Biométrie}{17}{section*.9}%
+\contentsline {section}{\numberline {2.3}Besoins fonctionnels}{17}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Authentification et gestion de session}{17}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Authentification multi-facteurs (MFA)}{18}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Gestion des niveaux d'accès}{18}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Gestion des ressources}{18}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Administration et supervision}{19}{subsection.2.3.5}%
+\contentsline {section}{\numberline {2.4}Besoins non fonctionnels}{19}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Sécurité}{19}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Performance}{20}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Disponibilité et fiabilité}{20}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}Évolutivité et maintenabilité}{20}{subsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}Ergonomie}{20}{subsection.2.4.5}%
+\contentsline {section}{\numberline {2.5}Cas d'utilisation}{21}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}CU1 : S'authentifier}{21}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}CU2 : Enregistrer son visage}{21}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}CU3 : Accéder à une ressource protégée}{22}{subsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.5.4}CU4 : Gérer les utilisateurs}{22}{subsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.5.5}CU5 : Configurer l'authentification OTP}{23}{subsection.2.5.5}%
+\contentsline {subsection}{\numberline {2.5.6}CU6 : Consulter les journaux d'activité}{23}{subsection.2.5.6}%
+\contentsline {section}{\numberline {2.6}Diagrammes de cas d'utilisation}{23}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Diagramme de cas d'utilisation global}{24}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Diagramme de cas d'utilisation MFA}{24}{subsection.2.6.2}%
+\contentsline {section}{\numberline {2.7}Conclusion}{26}{section.2.7}%
+\contentsline {chapter}{\numberline {3}Conception du système}{27}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{27}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Vue globale de la conception}{27}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Démarche de conception adoptée}{28}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Découpage du système en composants}{28}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Modélisation dynamique}{28}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Diagramme de séquence : Authentification et décision MFA}{29}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Diagramme de séquence : Validation MFA via OTP}{29}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Diagramme de séquence : Configuration OTP}{30}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Diagramme de séquence : Accès refusé à une ressource}{31}{subsection.3.3.4}%
+\contentsline {section}{\numberline {3.4}Modélisation statique}{32}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Présentation du diagramme de classes}{32}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Description des principales classes}{33}{subsection.3.4.2}%
+\contentsline {subsubsection}{Classe User}{33}{section*.10}%
+\contentsline {subsubsection}{Classe AccessLevel}{34}{section*.11}%
+\contentsline {subsubsection}{Classe Resource}{34}{section*.12}%
+\contentsline {subsubsection}{Classe MfaSession}{34}{section*.13}%
+\contentsline {subsubsection}{Classe OtpConfig}{34}{section*.14}%
+\contentsline {subsubsection}{Classe BiometricData}{35}{section*.15}%
+\contentsline {subsubsection}{Classe AccessLog}{35}{section*.16}%
+\contentsline {subsection}{\numberline {3.4.3}Relations entre classes}{35}{subsection.3.4.3}%
+\contentsline {section}{\numberline {3.5}Architecture du système}{35}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Architecture logicielle}{35}{subsection.3.5.1}%
+\contentsline {subsubsection}{Frontend (React + TypeScript)}{36}{section*.17}%
+\contentsline {subsubsection}{Backend (Spring Boot)}{37}{section*.18}%
+\contentsline {subsubsection}{Service Biométrie (FastAPI + Python)}{37}{section*.19}%
+\contentsline {subsection}{\numberline {3.5.2}Architecture matérielle}{37}{subsection.3.5.2}%
+\contentsline {subsubsection}{Poste client}{38}{section*.20}%
+\contentsline {subsubsection}{Serveur Frontend}{38}{section*.21}%
+\contentsline {subsubsection}{Serveur Backend}{39}{section*.22}%
+\contentsline {subsubsection}{Serveur Biométrie}{39}{section*.23}%
+\contentsline {subsubsection}{Serveur Base de données}{39}{section*.24}%
+\contentsline {subsection}{\numberline {3.5.3}Protocoles et sécurisation des échanges}{39}{subsection.3.5.3}%
+\contentsline {section}{\numberline {3.6}Conclusion}{39}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Réalisation du système}{40}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction}{40}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Environnement matériel}{40}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Poste de développement}{40}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Configuration minimale requise}{41}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Contraintes liées à la biométrie}{41}{subsection.4.2.3}%
+\contentsline {section}{\numberline {4.3}Environnement logiciel}{41}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Système d'exploitation}{41}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Outils de développement}{42}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Frameworks et technologies}{42}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.4}Outils de test et de versionnement}{42}{subsection.4.3.4}%
+\contentsline {section}{\numberline {4.4}Présentation des interfaces graphiques}{43}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Page d'accueil}{43}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Interface de connexion}{44}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Interface de validation MFA}{44}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}Tableau de bord}{45}{subsection.4.4.4}%
+\contentsline {subsection}{\numberline {4.4.5}Exigences de niveau d'accès}{45}{subsection.4.4.5}%
+\contentsline {subsection}{\numberline {4.4.6}Interface Fan Zone}{46}{subsection.4.4.6}%
+\contentsline {subsection}{\numberline {4.4.7}Interface Stadium Operations}{47}{subsection.4.4.7}%
+\contentsline {subsection}{\numberline {4.4.8}Interface VIP Hospitality}{47}{subsection.4.4.8}%
+\contentsline {subsection}{\numberline {4.4.9}Interface VIP Reservations}{48}{subsection.4.4.9}%
+\contentsline {subsection}{\numberline {4.4.10}Interface Event Control Room}{49}{subsection.4.4.10}%
+\contentsline {subsection}{\numberline {4.4.11}Interface Team Travel Coordination}{49}{subsection.4.4.11}%
+\contentsline {subsection}{\numberline {4.4.12}Interface Documents Vault}{50}{subsection.4.4.12}%
+\contentsline {subsection}{\numberline {4.4.13}Interface Predictions League}{50}{subsection.4.4.13}%
+\contentsline {section}{\numberline {4.5}Conclusion}{51}{section.4.5}%
+\contentsline {chapter}{Conclusion Générale}{52}{chapter*.25}%
+\contentsline {chapter}{Annexes}{53}{chapter*.26}%
+\contentsline {section}{A1 – Table des acronymes}{53}{section*.27}%
+\contentsline {section}{A2 – Extraits techniques illustratifs}{53}{section*.28}%
+\contentsline {section}{A3 – Endpoints API principaux}{55}{section*.32}%
+\contentsline {section}{A4 – Checklist de conformité sécurité}{56}{section*.33}%

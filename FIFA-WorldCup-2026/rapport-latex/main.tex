@@ -1,0 +1,176 @@
+\documentclass[12pt,a4paper]{report}
+
+% ============================================================
+% Encodage / langue
+% ============================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+
+% ============================================================
+% Mise en page
+% ============================================================
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+
+% ============================================================
+% Figures / images
+% ============================================================
+\usepackage{graphicx}
+\usepackage{float}
+\graphicspath{{figures/}{figures/uml/}{figures/architecture/}{figures/ui/}{figures/logos/}}
+
+% ============================================================
+% Tableaux
+% ============================================================
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+
+% ============================================================
+% Listes
+% ============================================================
+\usepackage{enumitem}
+
+% ============================================================
+% Symboles
+% ============================================================
+\usepackage{amsmath}
+\usepackage{amssymb} % pour \checkmark
+
+% ============================================================
+% Code source
+% ============================================================
+\usepackage{xcolor}
+\usepackage{listings}
+
+\lstdefinestyle{codeStyle}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  captionpos=b,
+  showstringspaces=false,
+  tabsize=2
+}
+\lstset{style=codeStyle}
+
+% ============================================================
+% Liens PDF
+% ============================================================
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Rapport PFA - FIFA World Cup 2026 – Unity Hub},
+  pdfauthor={EMSI},
+  bookmarksopen=true
+}
+
+% ============================================================
+% Document
+% ============================================================
+\begin{document}
+
+% ============================================================
+% PAGE DE GARDE (logo + noms plus haut)
+% ============================================================
+% ============================================================
+% PAGE DE GARDE – version aérée et équilibrée
+% ============================================================
+\begin{titlepage}
+\begin{center}
+
+% --- Logo ---
+\vspace*{0.5cm}
+\includegraphics[width=6cm]{emsi_logo.png}
+
+\vspace{0.3cm}
+
+{ \textbf{École Marocaine des Sciences de l’Ingénieur (EMSI)}}
+
+% --- Titre principal ---
+\vspace{1.9cm}
+
+{\LARGE \textbf{Rapport de Projet de Fin d’Année}}
+
+\vspace{1cm}
+
+\rule{0.95\textwidth}{0.5pt}
+
+\vspace{0.8cm}
+
+{\Huge \textbf{FIFA World Cup 2026 – Unity Hub}}
+
+\vspace{0.6cm}
+
+{\Large
+Système de reconnaissance hybride et contrôle d’accès multi-niveaux avec authentification forte (MFA)
+}
+
+\vspace{0.8cm}
+
+\rule{0.95\textwidth}{0.5pt}
+
+% --- Bloc noms (aéré, pas collé) ---
+\vspace{1.9cm}
+
+\begin{tabular}{p{0.45\textwidth} p{0.45\textwidth}}
+\textbf{Réalisé par :} & \textbf{Encadré par :} \\[0.3cm]
+- TAJIRI Wissal & - M. LARHLIMI Abderrahim \\
+- AMJAD Chaimaa & \\
+\end{tabular}
+
+\vspace{1cm}
+
+% --- Soutenance et jury ---
+\textbf{Soutenu le 02/01/2026, devant les jurys :}
+
+\vspace{0.4cm}
+
+\begin{tabular}{l}
+- M. LARHLIMI \\
+- M. CHIBA \\
+\end{tabular}
+
+% --- Pousse la suite vers le bas ---
+\vfill
+
+{\large Filière : Ingénierie Informatique et Réseaux – 5ème année}\\[0.4cm]
+{\large Année universitaire : 2025–2026}
+
+\vspace{0.8cm}
+
+\end{center}
+\end{titlepage}
+
+
+% ============================================================
+% Sommaire + listes
+% ============================================================
+\tableofcontents
+\clearpage
+
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
+
+% ============================================================
+% Contenu
+% ============================================================
+\input{sections/00_introduction}
+\input{sections/01_chapitre1_cadre}
+\input{sections/02_chapitre2_besoins}
+\input{sections/03_chapitre3_conception}
+\input{sections/04_chapitre4_realisation}
+\input{sections/05_conclusion}
+\input{sections/06_annexes}
+
+\end{document}

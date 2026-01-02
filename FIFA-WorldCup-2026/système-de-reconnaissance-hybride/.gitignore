@@ -1,0 +1,96 @@
+# ============================================
+# Global .gitignore for Hybrid Access System
+# ============================================
+
+# ===== JAVA / MAVEN (auth-backend) =====
+auth-backend/target/
+auth-backend/*.jar
+auth-backend/*.war
+auth-backend/*.ear
+auth-backend/*.class
+auth-backend/.mvn/
+auth-backend/mvnw
+auth-backend/mvnw.cmd
+
+# ===== PYTHON (face-service) =====
+face-service/__pycache__/
+face-service/*.py[cod]
+face-service/*$py.class
+face-service/.pytest_cache/
+face-service/venv/
+face-service/env/
+face-service/.venv/
+face-service/*.egg-info/
+face-service/dist/
+face-service/build/
+face-service/.env
+
+# ML Models & Data
+face-service/models/*.h5
+face-service/models/*.pb
+face-service/data/embeddings/
+face-service/data/faces/
+
+# ===== NODE / REACT (frontend) =====
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/.cache/
+frontend/*.log
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+*~
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Database =====
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+
+# ===== Security =====
+*.pem
+*.key
+*.cert
+secrets/
+.env
+.env.local
+
+# ===== Temp Files =====
+tmp/
+temp/
+*.tmp
+.venv/
+__pycache__/
+*.pyc
+.env
+node_modules/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+

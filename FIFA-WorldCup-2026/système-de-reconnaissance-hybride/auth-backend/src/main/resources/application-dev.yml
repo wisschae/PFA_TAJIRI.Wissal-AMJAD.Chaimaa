@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hybridaccessdb
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: chaechae # CHANGEZ ce mot de passe par celui que vous avez choisi lors de l'installation
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # Mettre à jour les tables automatiquement (pas de suppression)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+# Face Recognition Microservice
+face-service:
+  url: http://localhost:8001
+
+logging:
+  level:
+    com.hybridaccess.auth_backend: DEBUG

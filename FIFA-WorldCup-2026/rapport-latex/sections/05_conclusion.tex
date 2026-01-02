@@ -1,0 +1,15 @@
+% ============================================================================
+% CONCLUSION GÉNÉRALE
+% ============================================================================
+
+\chapter*{Conclusion Générale}
+\addcontentsline{toc}{chapter}{Conclusion Générale}
+\markboth{Conclusion Générale}{Conclusion Générale}
+
+Le projet FIFA World Cup 2026 – Unity Hub avait pour objectif de répondre aux défis de sécurisation des accès dans le contexte d'un événement international majeur. Face à l'insuffisance des mécanismes d'authentification traditionnels et à la diversité des profils utilisateurs, nous avons conçu un système intégrant authentification multi-facteurs adaptative, reconnaissance biométrique et contrôle d'accès granulaire.
+
+Les travaux réalisés ont permis d'aboutir à une plateforme fonctionnelle répondant aux objectifs fixés. Le système implémente une authentification forte combinant mot de passe, code OTP et reconnaissance faciale, avec des exigences de vérification ajustées dynamiquement selon le niveau d'accès sollicité. L'architecture modulaire (frontend React, backend Spring Boot, microservice FastAPI) favorise la maintenabilité et l'évolutivité de la solution, tandis que la journalisation centralisée assure une traçabilité complète des événements d'accès.
+
+Certaines limites sont néanmoins identifiées, notamment la dépendance aux conditions matérielles pour la reconnaissance faciale et les contraintes réglementaires liées au traitement des données biométriques. De plus, le système n'a pas été testé sous des charges représentatives d'un déploiement à grande échelle.
+
+Parmi les perspectives d'évolution, l'intégration du standard FIDO2/WebAuthn et l'exploitation des journaux par des algorithmes d'apprentissage automatique pour la détection d'anomalies en temps réel constituent des axes prometteurs. Le projet Unity Hub constitue ainsi une base solide pour des développements futurs, illustrant la faisabilité d'une approche intégrée de la sécurité des accès.

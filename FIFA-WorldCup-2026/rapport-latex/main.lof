@@ -1,0 +1,27 @@
+\babel@toc {french}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Diagramme de cas d'utilisation global du système}}{24}{figure.2.1}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Diagramme de cas d'utilisation : Authentification multi-facteurs}}{25}{figure.2.2}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagramme de séquence : Authentification et décision MFA}}{29}{figure.3.1}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagramme de séquence : Validation MFA via OTP}}{30}{figure.3.2}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagramme de séquence : Configuration de l'authentification OTP}}{31}{figure.3.3}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Diagramme de séquence : Accès refusé à une ressource protégée}}{32}{figure.3.4}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Diagramme de classes global du système}}{33}{figure.3.5}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Architecture logicielle du système}}{36}{figure.3.6}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Architecture matérielle de déploiement}}{38}{figure.3.7}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Page d'accueil de la plateforme Unity Hub}}{43}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Interface de connexion utilisateur}}{44}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Interface de validation multi-facteurs (MFA)}}{44}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Tableau de bord utilisateur}}{45}{figure.4.4}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Interface d'affichage des exigences de niveau d'accès}}{46}{figure.4.5}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Interface Fan Zone – Espace supporters}}{46}{figure.4.6}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Interface Stadium Operations – Gestion opérationnelle}}{47}{figure.4.7}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Interface VIP Hospitality – Services d'accueil privilégiés}}{48}{figure.4.8}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Interface VIP Reservations – Gestion des réservations privilégiées}}{48}{figure.4.9}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Interface Event Control Room – Centre de supervision événementielle}}{49}{figure.4.10}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Interface Team Travel Coordination – Coordination des déplacements}}{49}{figure.4.11}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Interface Documents Vault – Coffre-fort documentaire sécurisé}}{50}{figure.4.12}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Interface Predictions League – Espace pronostics et classements}}{51}{figure.4.13}%

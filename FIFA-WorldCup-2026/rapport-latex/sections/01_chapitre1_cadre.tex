@@ -1,0 +1,217 @@
+% ============================================================================
+% CHAPITRE 1 : PRÉSENTATION DU CADRE DE PROJET
+% ============================================================================
+
+\chapter{Présentation du cadre de projet}
+
+% ============================================================================
+% INTRODUCTION DU CHAPITRE
+% ============================================================================
+
+\section{Introduction}
+
+La réussite d'un projet de développement logiciel repose en grande partie sur une compréhension approfondie du contexte dans lequel il s'inscrit, des solutions existantes qu'il entend dépasser, et des choix méthodologiques qui guideront sa réalisation. Ce premier chapitre vise précisément à établir ces fondations, en positionnant notre projet dans son environnement technologique et organisationnel.
+
+Nous commençons par dresser un état des lieux des solutions actuelles de contrôle d'accès et d'authentification, en mettant en évidence leurs caractéristiques principales ainsi que leurs limitations dans un contexte à forte exigence sécuritaire. Cette étude de l'existant nous permet ensuite de formuler une analyse critique, identifiant les lacunes auxquelles notre projet propose de répondre.
+
+Dans un second temps, nous présentons la solution envisagée — FIFA World Cup 2026 – Unity Hub — en détaillant son architecture fonctionnelle et ses apports par rapport aux approches traditionnelles. Nous justifions également le choix du modèle de développement retenu, avant de conclure par la présentation du planning prévisionnel qui structure les différentes phases du projet.
+
+Ce chapitre constitue une base conceptuelle essentielle pour la suite du rapport.
+
+
+% ============================================================================
+% ÉTUDE DE L'EXISTANT
+% ============================================================================
+
+\section{Étude de l'existant}
+
+L'authentification et le contrôle d'accès constituent des préoccupations majeures pour tout système d'information moderne. Avant de présenter notre solution, il convient d'examiner les approches actuellement déployées dans l'industrie et d'en comprendre les mécanismes fondamentaux.
+
+\subsection{Authentification par identifiant et mot de passe}
+
+La méthode d'authentification la plus répandue demeure le couple identifiant/mot de passe. Ce mécanisme, hérité des premiers systèmes informatiques, repose sur un principe simple : l'utilisateur prouve son identité en fournissant une information secrète qu'il est censé être le seul à connaître. La plupart des applications web, des systèmes d'exploitation et des services en ligne continuent d'utiliser cette approche comme méthode d'authentification primaire.
+
+D'un point de vue technique, les mots de passe sont généralement stockés sous forme de hachages cryptographiques (bcrypt, Argon2, PBKDF2) afin d'éviter leur exposition en cas de compromission de la base de données. Néanmoins, cette méthode présente des vulnérabilités intrinsèques liées au facteur humain : mots de passe faibles, réutilisation sur plusieurs plateformes, sensibilité aux attaques de type phishing ou ingénierie sociale.
+
+\subsection{Authentification à deux facteurs (2FA)}
+
+Face aux limites de l'authentification simple, l'industrie a progressivement adopté des mécanismes d'authentification à deux facteurs. Le principe consiste à combiner deux éléments de nature différente parmi les trois catégories classiques : ce que l'utilisateur sait (mot de passe), ce qu'il possède (téléphone, token matériel), et ce qu'il est (caractéristiques biométriques).
+
+Les implémentations les plus courantes incluent l'envoi de codes par SMS, l'utilisation d'applications génératrices de codes temporels (TOTP) comme Google Authenticator ou Microsoft Authenticator, ou encore les clés de sécurité physiques conformes au standard FIDO2. Ces solutions renforcent significativement la sécurité en imposant la compromission de deux facteurs distincts pour réussir une usurpation d'identité.
+
+\subsection{Systèmes de contrôle d'accès basés sur les rôles (RBAC)}
+
+En parallèle des mécanismes d'authentification, les organisations déploient des systèmes de contrôle d'accès pour déterminer les ressources auxquelles chaque utilisateur peut accéder. Le modèle RBAC (Role-Based Access Control) constitue l'approche la plus répandue : les permissions sont attribuées à des rôles, et les utilisateurs se voient assigner un ou plusieurs rôles en fonction de leurs responsabilités.
+
+Ce modèle offre une gestion centralisée et relativement simple des autorisations, particulièrement adaptée aux organisations avec des hiérarchies bien définies. Cependant, il manque de flexibilité pour gérer des contextes dynamiques où le niveau d'accès devrait varier en fonction de paramètres circonstanciels.
+
+\subsection{Solutions biométriques existantes}
+
+L'authentification biométrique s'est progressivement démocratisée, notamment grâce à l'intégration de capteurs d'empreintes digitales et de caméras pour la reconnaissance faciale dans les appareils mobiles. Des technologies comme Face ID d'Apple ou Windows Hello de Microsoft ont contribué à familiariser le grand public avec ces mécanismes.
+
+Dans le domaine professionnel, des solutions telles que les systèmes de contrôle d'accès physique par reconnaissance faciale ou par empreinte palmaire sont déployées dans les environnements sensibles. Ces systèmes reposent généralement sur des algorithmes d'apprentissage profond capables d'extraire et de comparer des caractéristiques biométriques uniques.
+
+% ============================================================================
+% ANALYSE CRITIQUE DE L'EXISTANT
+% ============================================================================
+
+\section{Analyse critique de l'existant}
+
+L'examen des solutions présentées précédemment révèle plusieurs limitations qui justifient le développement d'une approche plus intégrée et adaptative.
+
+\subsection{Vulnérabilités de l'authentification traditionnelle}
+
+L'authentification par mot de passe seul présente des faiblesses documentées et récurrentes. Les études de sécurité montrent que la majorité des compromissions de comptes résultent de mots de passe faibles ou réutilisés. Les attaques par credential stuffing, exploitant des bases de données de mots de passe compromis, représentent une menace constante pour les systèmes reposant uniquement sur ce mécanisme.
+
+Par ailleurs, les techniques de phishing se sont considérablement sophistiquées, rendant difficile pour les utilisateurs non avertis de distinguer une tentative d'hameçonnage d'une communication légitime. Dans un contexte d'événement international comme la Coupe du Monde, où des millions d'utilisateurs interagissent avec des systèmes numériques, cette vulnérabilité devient particulièrement critique.
+
+\subsection{Limites des approches 2FA actuelles}
+
+Si l'authentification à deux facteurs renforce indéniablement la sécurité, les implémentations courantes présentent leurs propres limitations. L'envoi de codes par SMS, bien que largement déployé, est vulnérable aux attaques de type SIM swapping. Les applications TOTP, plus sécurisées, peuvent être contournées par des attaques en temps réel de type man-in-the-middle.
+
+De plus, ces mécanismes sont souvent appliqués de manière uniforme, sans tenir compte du contexte de la connexion ni de la sensibilité des ressources sollicitées. Un utilisateur accédant à des informations publiques depuis un appareil reconnu subit les mêmes contraintes d'authentification que celui tentant d'accéder à des données confidentielles depuis un terminal inconnu.
+
+\subsection{Rigidité des modèles de contrôle d'accès}
+
+Les systèmes RBAC traditionnels, bien qu'efficaces pour des organisations stables, peinent à s'adapter à des contextes dynamiques. Dans le cadre d'un événement comme la Coupe du Monde, les besoins d'accès évoluent rapidement : accréditations temporaires, niveaux de privilèges variables selon les phases de l'événement, et nécessité de réagir promptement aux incidents de sécurité.
+
+La rigidité de ces modèles conduit souvent à une attribution excessive de permissions (principe du moindre privilège non respecté) ou, à l'inverse, à des blocages opérationnels lorsque les droits d'accès ne correspondent pas aux besoins réels des utilisateurs.
+
+\subsection{Fragmentation des solutions de sécurité}
+
+Un constat récurrent dans les organisations concerne la fragmentation des solutions de sécurité. L'authentification, le contrôle d'accès et la biométrie sont souvent gérés par des systèmes distincts, peu ou mal intégrés. Cette situation engendre des incohérences, des failles potentielles aux interfaces entre systèmes, et une expérience utilisateur dégradée par la multiplication des procédures d'identification.
+
+% ============================================================================
+% SOLUTION PROPOSÉE
+% ============================================================================
+
+\section{Solution proposée}
+
+Face aux limitations identifiées, nous proposons le développement de la plateforme \textbf{FIFA World Cup 2026 – Unity Hub}, un système intégré de reconnaissance hybride et de contrôle d'accès multi-niveaux.
+
+\subsection{Principe général}
+
+Notre solution repose sur trois piliers fondamentaux intégrés au sein d'une architecture unifiée :
+
+\begin{enumerate}
+    \item \textbf{Authentification multi-facteurs adaptative} : le système évalue dynamiquement le niveau de risque associé à chaque tentative de connexion et ajuste les exigences d'authentification en conséquence. Pour un accès à faible risque, une authentification simple peut suffire ; pour des ressources sensibles ou des connexions suspectes, des facteurs supplémentaires sont requis.
+    
+    \item \textbf{Reconnaissance biométrique avancée} : l'intégration d'un module de reconnaissance faciale basé sur des algorithmes d'apprentissage profond permet une vérification robuste de l'identité de l'utilisateur, difficilement falsifiable contrairement aux facteurs de connaissance ou de possession.
+    
+    \item \textbf{Gestion granulaire des niveaux d'accès} : le système définit plusieurs niveaux d'habilitation (basique, étendu, sensible, administration), chacun associé à des exigences d'authentification spécifiques et à un périmètre de ressources accessibles.
+\end{enumerate}
+
+\subsection{Avantages de la solution}
+
+La plateforme Unity Hub présente plusieurs avantages significatifs par rapport aux approches existantes :
+
+\begin{itemize}
+    \item \textbf{Sécurité renforcée} : la combinaison de multiples facteurs d'authentification, incluant la biométrie, élève considérablement le niveau de protection contre les tentatives d'intrusion et d'usurpation d'identité.
+    
+    \item \textbf{Adaptabilité contextuelle} : l'évaluation dynamique du risque permet d'ajuster les contraintes d'authentification au contexte, offrant un équilibre entre sécurité et ergonomie.
+    
+    \item \textbf{Architecture intégrée} : l'unification des fonctions d'authentification, de biométrie et de contrôle d'accès au sein d'une même plateforme élimine les incohérences et les vulnérabilités liées aux interfaces entre systèmes disparates.
+    
+    \item \textbf{Traçabilité complète} : la journalisation centralisée de tous les événements d'accès facilite l'audit de sécurité et la détection d'anomalies.
+    
+    \item \textbf{Modularité technique} : l'architecture en microservices (backend Spring Boot, service biométrique FastAPI, frontend React) favorise l'évolutivité et la maintenance du système.
+\end{itemize}
+
+\subsection{Limites et contraintes}
+
+Nous identifions néanmoins certaines limites inhérentes à notre approche :
+
+\begin{itemize}
+    \item \textbf{Dépendance matérielle} : la reconnaissance faciale requiert un équipement de capture d'image de qualité suffisante, ce qui peut poser des difficultés dans certains environnements.
+    
+    \item \textbf{Complexité d'intégration} : l'architecture distribuée, bien que modulaire, implique une coordination accrue entre les différents services et une gestion rigoureuse des communications inter-services.
+    
+    \item \textbf{Considérations relatives à la vie privée} : le stockage et le traitement de données biométriques soulèvent des questions de conformité réglementaire (RGPD) et de protection de la vie privée, nécessitant des mesures de sécurisation et d'anonymisation appropriées.
+\end{itemize}
+
+% ============================================================================
+% CHOIX DU MODÈLE DE DÉVELOPPEMENT
+% ============================================================================
+
+\section{Choix du modèle de développement}
+
+Le choix du modèle de développement constitue une décision structurante pour la conduite du projet. Nous présentons ici les principales options envisagées et justifions notre choix.
+
+\subsection{Modèles envisagés}
+
+Plusieurs modèles de développement logiciel ont été considérés :
+
+\begin{itemize}
+    \item \textbf{Modèle en cascade} : approche séquentielle où chaque phase (analyse, conception, développement, tests) doit être entièrement achevée avant de passer à la suivante. Ce modèle offre une structure claire mais manque de flexibilité face aux évolutions des besoins.
+    
+    \item \textbf{Modèle en V} : variante du modèle en cascade intégrant une correspondance entre phases de développement et phases de validation. Il renforce l'assurance qualité mais conserve la rigidité de l'approche séquentielle.
+    
+    \item \textbf{Modèle itératif incrémental} : approche cyclique où le système est développé par incréments successifs, chaque itération ajoutant de nouvelles fonctionnalités. Ce modèle permet une validation progressive et une adaptation aux retours d'expérience.
+    
+    \item \textbf{Méthodologies agiles} : famille d'approches (Scrum, Kanban, XP) privilégiant la collaboration, l'adaptation au changement et la livraison fréquente de fonctionnalités opérationnelles.
+\end{itemize}
+
+\subsection{Justification du choix}
+
+Nous avons retenu une \textbf{approche agile de type Scrum}, adaptée aux spécificités de notre projet. Ce choix se justifie par plusieurs considérations :
+
+\begin{enumerate}
+    \item \textbf{Nature évolutive des besoins} : dans le contexte d'un système de sécurité, les exigences peuvent évoluer rapidement en fonction des menaces identifiées et des retours opérationnels. L'approche agile permet d'intégrer ces évolutions sans remettre en cause l'ensemble du planning.
+    
+    \item \textbf{Complexité technique} : l'intégration de technologies variées (biométrie, authentification forte, microservices) implique une part d'incertitude technique. Le développement itératif permet de valider progressivement les choix technologiques et d'ajuster l'architecture si nécessaire.
+    
+    \item \textbf{Besoin de validation précoce} : la livraison incrémentale de fonctionnalités opérationnelles permet aux parties prenantes de valider régulièrement la conformité du système avec leurs attentes, réduisant ainsi les risques de divergence entre le produit final et les besoins réels.
+    
+    \item \textbf{Contraintes temporelles} : le cadre académique du projet impose un calendrier contraint. L'organisation en sprints de durée fixe facilite le suivi de l'avancement et l'identification rapide des éventuels retards.
+\end{enumerate}
+
+% ============================================================================
+% PLANNING PRÉVISIONNEL
+% ============================================================================
+
+\section{Planning prévisionnel}
+
+La conduite du projet s'organise autour de phases structurées, présentées dans le tableau \ref{tab:planning}. Ce planning prévisionnel fixe les jalons principaux et les livrables attendus à chaque étape.
+
+\begin{table}[H]
+\centering
+\caption{Planning prévisionnel du projet}
+\label{tab:planning}
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\textbf{Phase} & \textbf{Description} \\
+\hline
+Analyse & Étude de l'existant, recueil des besoins, identification des acteurs et des cas d'utilisation \\
+\hline
+Spécification & Formalisation des besoins fonctionnels et non fonctionnels, rédaction des spécifications \\
+\hline
+Conception & Modélisation UML (cas d'utilisation, séquences, classes), définition de l'architecture \\
+\hline
+Développement Backend & Implémentation des services Spring Boot, gestion des utilisateurs, authentification MFA \\
+\hline
+Développement Biométrie & Développement du service de reconnaissance faciale avec FastAPI et TensorFlow \\
+\hline
+Développement Frontend & Implémentation de l'interface utilisateur React + TypeScript \\
+\hline
+Intégration & Intégration des différents modules, tests d'intégration \\
+\hline
+Tests et Validation & Tests fonctionnels, tests de sécurité, correction des anomalies \\
+\hline
+Documentation & Rédaction du rapport, préparation de la soutenance \\
+\hline
+\end{tabularx}
+\end{table}
+
+Nous observons que certaines phases se chevauchent volontairement, reflétant la nature itérative de notre approche de développement. Le développement parallèle des composants backend, biométrie et frontend optimise l'utilisation des ressources tout en permettant une intégration progressive.
+
+% ============================================================================
+% CONCLUSION DU CHAPITRE
+% ============================================================================
+
+\section{Conclusion}
+
+Ce premier chapitre a permis de poser les fondations du projet FIFA World Cup 2026 – Unity Hub. L'étude de l'existant a mis en lumière les mécanismes d'authentification et de contrôle d'accès couramment déployés, tandis que l'analyse critique a révélé leurs limitations face aux exigences d'un événement d'envergure internationale.
+
+La solution proposée, combinant authentification multi-facteurs adaptative, reconnaissance biométrique et gestion granulaire des niveaux d'accès, répond à ces insuffisances en offrant un niveau de sécurité renforcé sans sacrifier l'ergonomie. Le choix d'une méthodologie agile garantit la flexibilité nécessaire pour s'adapter aux évolutions des besoins et aux contraintes techniques.
+
+Le chapitre suivant sera consacré à la spécification détaillée des besoins, où nous présenterons les exigences fonctionnelles et non fonctionnelles du système, les acteurs impliqués et les principaux cas d'utilisation.

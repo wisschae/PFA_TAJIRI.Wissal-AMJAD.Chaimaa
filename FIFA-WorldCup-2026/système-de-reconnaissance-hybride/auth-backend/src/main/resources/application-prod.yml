@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hybridaccessdb
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:hybrid_user}
+    password: ${DB_PASSWORD:}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Ne jamais créer/modifier en production
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  h2:
+    console:
+      enabled: false  # Désactiver H2 console en production
+
+logging:
+  level:
+    com.hybridaccess.auth_backend: INFO
+    org.springframework.security: WARN

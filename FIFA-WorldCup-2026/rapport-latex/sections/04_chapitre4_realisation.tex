@@ -1,0 +1,340 @@
+% ============================================================================
+% CHAPITRE 4 : RÉALISATION DU SYSTÈME
+% ============================================================================
+
+\chapter{Réalisation du système}
+
+% ============================================================================
+% INTRODUCTION DU CHAPITRE
+% ============================================================================
+
+\section{Introduction}
+
+La phase de réalisation constitue l'aboutissement concret du cycle de développement, où la conception théorique se matérialise en un système fonctionnel. Cette étape traduit les modèles UML et les spécifications architecturales en composants logiciels opérationnels, interfaces utilisateur et services interconnectés.
+
+Dans le cadre du projet FIFA World Cup 2026 – Unity Hub, la réalisation s'est appuyée sur les choix technologiques validés lors de la conception : un frontend React avec TypeScript, un backend Spring Boot, et un service de reconnaissance faciale FastAPI. Le respect de ces orientations garantit la cohérence entre le système livré et les exigences définies aux chapitres précédents.
+
+Ce chapitre présente successivement l'environnement matériel de développement, l'environnement logiciel utilisé, puis détaille les principales interfaces graphiques de l'application. Cette présentation permet d'illustrer concrètement les fonctionnalités implémentées et de démontrer la conformité du système avec les spécifications fonctionnelles.
+
+% ============================================================================
+% ENVIRONNEMENT MATÉRIEL
+% ============================================================================
+
+\section{Environnement matériel}
+
+Le développement du système a nécessité un environnement matériel adapté aux contraintes des différentes technologies mises en œuvre, notamment pour les traitements de reconnaissance faciale qui sollicitent davantage les ressources.
+
+\subsection{Poste de développement}
+
+Le développement a été réalisé sur un poste de travail présentant les caractéristiques suivantes :
+
+\begin{itemize}
+    \item \textbf{Processeur} : Intel Core i7 (8 cœurs) ou équivalent AMD Ryzen
+    \item \textbf{Mémoire vive} : 16 Go de RAM DDR4
+    \item \textbf{Stockage} : SSD NVMe de 512 Go
+    \item \textbf{Carte graphique} : GPU dédié compatible CUDA (pour l'accélération TensorFlow)
+    \item \textbf{Périphériques} : Webcam HD (720p minimum) pour les tests de reconnaissance faciale
+\end{itemize}
+
+Cette configuration permet d'exécuter simultanément les trois composants du système (frontend, backend, service biométrie) tout en conservant des performances satisfaisantes lors des phases de développement et de test.
+
+\subsection{Configuration minimale requise}
+
+Pour le déploiement en environnement de production, les configurations minimales recommandées sont :
+
+\begin{itemize}
+    \item \textbf{Serveur Backend} : 4 vCPU, 8 Go RAM, 100 Go stockage SSD
+    \item \textbf{Serveur Biométrie} : 4 vCPU (GPU recommandé), 8 Go RAM, 50 Go stockage SSD
+    \item \textbf{Serveur Base de données} : 2 vCPU, 4 Go RAM, 200 Go stockage SSD (extensible)
+    \item \textbf{Poste client} : Navigateur moderne, webcam pour la biométrie, connexion internet stable
+\end{itemize}
+
+\subsection{Contraintes liées à la biométrie}
+
+La reconnaissance faciale impose des contraintes matérielles spécifiques. La caméra du poste client doit offrir une résolution suffisante (720p minimum) et un bon comportement en conditions d'éclairage variables. Côté serveur, le service biométrie bénéficie significativement d'une accélération GPU pour le calcul des embeddings faciaux, bien qu'un fonctionnement sur CPU seul reste possible avec des temps de réponse légèrement allongés.
+
+% ============================================================================
+% ENVIRONNEMENT LOGICIEL
+% ============================================================================
+
+\section{Environnement logiciel}
+
+L'environnement logiciel de développement regroupe l'ensemble des outils, frameworks et technologies utilisés pour la réalisation du système.
+
+\subsection{Système d'exploitation}
+
+Le développement a été effectué principalement sous Windows 11, avec une compatibilité vérifiée sous Linux (Ubuntu 22.04) pour le déploiement serveur. Les conteneurs Docker permettent d'assurer la portabilité des services entre environnements.
+
+\subsection{Outils de développement}
+
+Les outils suivants ont été utilisés pour le développement :
+
+\begin{table}[H]
+\centering
+\caption{Outils de développement utilisés}
+\label{tab:outils_dev}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Catégorie} & \textbf{Outil} & \textbf{Usage} \\
+\hline
+IDE & Visual Studio Code & Développement frontend et Python \\
+\hline
+IDE & IntelliJ IDEA & Développement backend Java \\
+\hline
+Versionnement & Git & Gestion du code source \\
+\hline
+Plateforme Git & GitHub & Hébergement du dépôt \\
+\hline
+Conteneurisation & Docker & Isolation des services \\
+\hline
+Client API & Postman & Tests des endpoints REST \\
+\hline
+Navigateur & Google Chrome & Tests et débogage frontend \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Frameworks et technologies}
+
+Le tableau \ref{tab:technologies} récapitule les principales technologies utilisées pour chaque composant du système.
+
+\begin{table}[H]
+\centering
+\caption{Technologies utilisées par composant}
+\label{tab:technologies}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Composant} & \textbf{Technologie} & \textbf{Version} \\
+\hline
+Frontend & React & 18.x \\
+\hline
+Frontend & TypeScript & 5.x \\
+\hline
+Frontend & Vite & 5.x \\
+\hline
+Frontend & TailwindCSS & 3.x \\
+\hline
+Frontend & Axios & 1.x \\
+\hline
+Backend & Spring Boot & 3.2.x \\
+\hline
+Backend & Java & 17 \\
+\hline
+Backend & Spring Security & 6.x \\
+\hline
+Backend & JWT (jjwt) & 0.12.x \\
+\hline
+Backend & H2 / PostgreSQL & 2.x / 15.x \\
+\hline
+Biométrie & FastAPI & 0.100+ \\
+\hline
+Biométrie & Python & 3.11 \\
+\hline
+Biométrie & TensorFlow & 2.15 \\
+\hline
+Biométrie & OpenCV & 4.x \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Outils de test et de versionnement}
+
+La qualité du code est assurée par des tests unitaires et d'intégration :
+
+\begin{itemize}
+    \item \textbf{Backend} : JUnit 5 pour les tests unitaires, Mockito pour les mocks
+    \item \textbf{Frontend} : Jest et React Testing Library pour les tests de composants
+    \item \textbf{Biométrie} : Pytest pour les tests Python
+    \item \textbf{API} : Collections Postman pour les tests d'intégration
+\end{itemize}
+
+Le versionnement du code suit le workflow Git Flow, avec des branches dédiées aux fonctionnalités, aux correctifs et aux versions stables.
+
+% ============================================================================
+% PRÉSENTATION DES INTERFACES GRAPHIQUES
+% ============================================================================
+
+\section{Présentation des interfaces graphiques}
+
+Cette section présente les principales interfaces graphiques de l'application FIFA World Cup 2026 – Unity Hub. Chaque interface est décrite du point de vue de son rôle fonctionnel et de son ergonomie.
+
+\subsection{Page d'accueil}
+
+La page d'accueil constitue le point d'entrée de l'application. Elle présente la plateforme et oriente les visiteurs vers les fonctionnalités principales. La figure \ref{fig:ui_homepage} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/homepage}
+    \caption{Page d'accueil de la plateforme Unity Hub}
+    \label{fig:ui_homepage}
+\end{figure}
+
+Cette interface adopte une identité visuelle cohérente avec l'événement FIFA World Cup 2026, utilisant les couleurs officielles et une mise en page moderne. Un bouton d'appel à l'action invite l'utilisateur à se connecter ou à découvrir les fonctionnalités de la plateforme. La navigation principale permet d'accéder rapidement aux différentes sections publiques.
+
+\subsection{Interface de connexion}
+
+L'interface de connexion permet aux utilisateurs de s'authentifier auprès du système. Elle constitue la première étape du processus MFA. La figure \ref{fig:ui_login} présente cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ui/login_interface}
+    \caption{Interface de connexion utilisateur}
+    \label{fig:ui_login}
+\end{figure}
+
+L'interface propose un formulaire épuré comprenant les champs email et mot de passe. Un lien vers la récupération de mot de passe est disponible pour les utilisateurs ayant oublié leurs identifiants. Les messages d'erreur sont affichés de manière claire en cas d'échec d'authentification, sans révéler d'information sensible sur la validité des identifiants.
+
+\subsection{Interface de validation MFA}
+
+Après validation des identifiants, l'utilisateur est dirigé vers l'interface de validation MFA si son niveau d'accès l'exige. Cette interface guide l'utilisateur à travers les étapes de vérification supplémentaires. La figure \ref{fig:ui_mfa} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ui/verification_mfa}
+    \caption{Interface de validation multi-facteurs (MFA)}
+    \label{fig:ui_mfa}
+\end{figure}
+
+L'interface présente clairement les facteurs d'authentification requis et validés. Selon la configuration de l'utilisateur, elle peut demander la saisie d'un code OTP (avec un champ de saisie dédié) et/ou une vérification faciale (avec activation de la caméra et affichage d'un aperçu). Un indicateur de progression informe l'utilisateur des étapes restantes.
+
+\subsection{Tableau de bord}
+
+Une fois authentifié, l'utilisateur accède à son tableau de bord personnalisé. Cette interface centrale présente les informations et actions accessibles selon son niveau d'habilitation. La figure \ref{fig:ui_dashboard} présente le tableau de bord.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/dashboard}
+    \caption{Tableau de bord utilisateur}
+    \label{fig:ui_dashboard}
+\end{figure}
+
+Le tableau de bord affiche le nom de l'utilisateur connecté, son niveau d'accès actuel et les ressources auxquelles il peut accéder. Des cartes thématiques permettent de naviguer vers les différentes fonctionnalités de la plateforme. Pour les administrateurs, des sections supplémentaires de gestion et de supervision sont visibles.
+
+\subsection{Exigences de niveau d'accès}
+
+Lorsqu'un utilisateur tente d'accéder à une ressource requérant un niveau supérieur au sien, une interface dédiée l'informe des exigences. La figure \ref{fig:ui_access_requirements} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ui/access_level_requirements}
+    \caption{Interface d'affichage des exigences de niveau d'accès}
+    \label{fig:ui_access_requirements}
+\end{figure}
+
+Cette interface affiche de manière explicite le niveau d'accès actuel de l'utilisateur et le niveau requis pour accéder à la ressource demandée. Elle détaille les facteurs d'authentification supplémentaires nécessaires et propose, le cas échéant, une option pour initier une élévation de privilèges si l'utilisateur dispose des prérequis.
+
+\subsection{Interface Fan Zone}
+
+L'interface Fan Zone représente une ressource accessible aux utilisateurs de niveau intermédiaire. Elle illustre le contenu thématique lié à la Coupe du Monde. La figure \ref{fig:ui_fan_zone} présente cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_live_fan_zone}
+    \caption{Interface Fan Zone – Espace supporters}
+    \label{fig:ui_fan_zone}
+\end{figure}
+
+Cette interface propose des contenus exclusifs destinés aux supporters : actualités en temps réel, informations sur les matchs, statistiques et interactions communautaires. L'accès à cette zone requiert au minimum une authentification de niveau 2, incluant la validation OTP.
+
+\subsection{Interface Stadium Operations}
+
+L'interface Stadium Operations constitue une ressource sensible accessible uniquement aux utilisateurs disposant des plus hauts niveaux d'habilitation. La figure \ref{fig:ui_stadium_ops} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_stadium_operations}
+    \caption{Interface Stadium Operations – Gestion opérationnelle}
+    \label{fig:ui_stadium_ops}
+\end{figure}
+
+Cette interface d'administration permet de gérer les opérations liées aux stades : contrôle des flux, gestion des accréditations, supervision des accès en temps réel. L'accès requiert une authentification de niveau 3 complète, incluant la vérification biométrique par reconnaissance faciale.
+
+\subsection{Interface VIP Hospitality}
+
+L'interface VIP Hospitality est dédiée à la gestion des services d'accueil haut de gamme pour les invités VIP de l'événement. La figure \ref{fig:ui_vip_hospitality} présente cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_vip_hospitality}
+    \caption{Interface VIP Hospitality – Services d'accueil privilégiés}
+    \label{fig:ui_vip_hospitality}
+\end{figure}
+
+Cette interface permet de consulter et gérer les prestations exclusives réservées aux invités de marque : accès aux salons privés, services de restauration premium et accompagnement personnalisé. L'accès à cette ressource nécessite un niveau d'habilitation élevé, garantissant la confidentialité des informations relatives aux invités VIP.
+
+\subsection{Interface VIP Reservations}
+
+L'interface VIP Reservations centralise la gestion des réservations pour les espaces et services VIP. La figure \ref{fig:ui_vip_reservations} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_vip_reservations}
+    \caption{Interface VIP Reservations – Gestion des réservations privilégiées}
+    \label{fig:ui_vip_reservations}
+\end{figure}
+
+Cette interface affiche le calendrier des réservations, les disponibilités des espaces VIP et permet de créer ou modifier des réservations. Elle s'adresse aux responsables de l'hospitalité et requiert une authentification multi-facteurs complète pour protéger les données sensibles des invités.
+
+\subsection{Interface Event Control Room}
+
+L'interface Event Control Room constitue le centre de supervision des événements en temps réel. La figure \ref{fig:ui_event_control} présente cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_event_control_room}
+    \caption{Interface Event Control Room – Centre de supervision événementielle}
+    \label{fig:ui_event_control}
+\end{figure}
+
+Cette interface agrège les informations critiques des différents stades et sites de l'événement : flux de spectateurs, alertes de sécurité, statuts opérationnels. Elle permet aux responsables de prendre des décisions éclairées en temps réel. L'accès est strictement réservé aux administrateurs disposant du niveau d'accès maximal.
+
+\subsection{Interface Team Travel Coordination}
+
+L'interface Team Travel Coordination facilite la gestion logistique des déplacements des équipes participantes. La figure \ref{fig:ui_team_travel} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_team_travel_coordination}
+    \caption{Interface Team Travel Coordination – Coordination des déplacements}
+    \label{fig:ui_team_travel}
+\end{figure}
+
+Cette interface permet de planifier et suivre les itinéraires des délégations officielles, de coordonner les transports et d'assurer la liaison avec les différents prestataires logistiques. Les informations sensibles relatives aux déplacements des équipes sont protégées par un contrôle d'accès renforcé.
+
+\subsection{Interface Documents Vault}
+
+L'interface Documents Vault offre un espace sécurisé pour le stockage et le partage de documents confidentiels. La figure \ref{fig:ui_documents_vault} présente cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_documents_vault}
+    \caption{Interface Documents Vault – Coffre-fort documentaire sécurisé}
+    \label{fig:ui_documents_vault}
+\end{figure}
+
+Cette interface permet d'accéder aux documents officiels, contrats et fichiers sensibles de l'organisation. Chaque document est classifié selon son niveau de confidentialité, et l'accès est conditionné par le niveau d'habilitation de l'utilisateur et la validation MFA appropriée.
+
+\subsection{Interface Predictions League}
+
+L'interface Predictions League propose un espace ludique de pronostics pour les utilisateurs de la plateforme. La figure \ref{fig:ui_predictions} illustre cette interface.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{ui/ui_predictions_league}
+    \caption{Interface Predictions League – Espace pronostics et classements}
+    \label{fig:ui_predictions}
+\end{figure}
+
+Cette interface permet aux utilisateurs authentifiés de soumettre leurs pronostics sur les matchs à venir, de consulter les classements et de suivre leurs performances. Accessible dès le niveau d'accès basique, elle contribue à l'engagement des utilisateurs tout en démontrant la gestion différenciée des ressources selon les niveaux d'habilitation.
+
+% ============================================================================
+% CONCLUSION DU CHAPITRE
+% ============================================================================
+
+\section{Conclusion}
+
+Ce chapitre a présenté la phase de réalisation du système FIFA World Cup 2026 – Unity Hub, en abordant les environnements matériel et logiciel ainsi que les principales interfaces utilisateur développées.
+
+Les choix techniques retenus permettent l’exécution efficace des différents composants du système et garantissent la qualité, la maintenabilité et la cohérence de l’application. Les interfaces graphiques réalisées illustrent concrètement les fonctionnalités mises en œuvre, dans le respect des principes d’ergonomie et d’accessibilité.
+
+La réalisation est conforme à la conception définie au chapitre précédent, confirmant la faisabilité technique des choix architecturaux et technologiques. La conclusion générale synthétisera l’ensemble des travaux réalisés et présentera les perspectives d’évolution du projet.

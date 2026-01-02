@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: auth-backend
+
+  profiles:
+    active: dev
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Configuration JWT
+jwt:
+  secret: hybridsystem2024supersecretkeythatislongenoughforjwt256bitsminimumrequirement
+  expiration: 86400000  # 24 heures en millisecondes
+
+# Configuration Face Service
+face-service:
+  url: http://localhost:8001
+  endpoints:
+    enroll: /api/face/enroll
+    verify: /api/face/verify
+    health: /health
+
+# Configuration Risk Assessment
+risk:
+  threshold:
+    low: 30
+    medium: 60
+    high: 80
+  factors:
+    unusual-hour-weight: 20
+    failed-attempts-weight: 30
+    sensitive-resource-weight: 25
+    location-change-weight: 25
+
+logging:
+  level:
+    com.hybridaccess.auth_backend: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG

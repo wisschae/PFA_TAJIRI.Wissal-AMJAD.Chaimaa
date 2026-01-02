@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* World Cup 2026 Dark Premium Theme */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 190 100% 50%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 222 47% 14%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 30% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 160 100% 45%;
+    --accent-foreground: 222 47% 6%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 30% 20%;
+    --input: 222 30% 15%;
+    --ring: 190 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom World Cup Colors */
+    --wc-navy: 222 47% 6%;
+    --wc-navy-light: 222 47% 12%;
+    --wc-cyan: 190 100% 50%;
+    --wc-cyan-glow: 190 100% 60%;
+    --wc-emerald: 160 100% 45%;
+    --wc-gold: 45 100% 55%;
+    --wc-purple: 270 80% 60%;
+    --wc-red: 0 85% 55%;
+
+    /* Glassmorphism */
+    --glass-bg: 222 47% 10% / 0.6;
+    --glass-border: 210 40% 98% / 0.1;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--wc-cyan)) 0%, hsl(var(--wc-emerald)) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(var(--wc-gold)) 0%, hsl(45 100% 40%) 100%);
+    --gradient-purple: linear-gradient(135deg, hsl(var(--wc-purple)) 0%, hsl(var(--wc-cyan)) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(var(--wc-navy)) 0%, hsl(222 47% 3%) 100%);
+
+    /* Shadows */
+    --shadow-cyan: 0 0 30px hsl(var(--wc-cyan) / 0.3);
+    --shadow-emerald: 0 0 30px hsl(var(--wc-emerald) / 0.3);
+    --shadow-gold: 0 0 30px hsl(var(--wc-gold) / 0.3);
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 190 100% 50%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 47% 14%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 30% 20%;
+    --sidebar-ring: 190 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Card */
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-xl border border-white/10 rounded-xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Neon Glow Effects */
+  .glow-cyan {
+    box-shadow: 0 0 20px hsl(var(--wc-cyan) / 0.4), 0 0 40px hsl(var(--wc-cyan) / 0.2);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 20px hsl(var(--wc-emerald) / 0.4), 0 0 40px hsl(var(--wc-emerald) / 0.2);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px hsl(var(--wc-gold) / 0.4), 0 0 40px hsl(var(--wc-gold) / 0.2);
+  }
+
+  /* Text Glow */
+  .text-glow-cyan {
+    text-shadow: 0 0 20px hsl(var(--wc-cyan) / 0.6), 0 0 40px hsl(var(--wc-cyan) / 0.3);
+  }
+
+  .text-glow-gold {
+    text-shadow: 0 0 20px hsl(var(--wc-gold) / 0.6), 0 0 40px hsl(var(--wc-gold) / 0.3);
+  }
+
+  /* Stadium Light Effect */
+  .stadium-light {
+    background: radial-gradient(ellipse at 50% 0%, hsl(var(--wc-cyan) / 0.15) 0%, transparent 70%);
+  }
+
+  /* Pitch Lines Pattern */
+  .pitch-lines {
+    background-image: 
+      linear-gradient(90deg, hsl(var(--wc-emerald) / 0.05) 1px, transparent 1px),
+      linear-gradient(0deg, hsl(var(--wc-emerald) / 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* Animated Border */
+  .border-animated {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .border-animated::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, hsl(var(--wc-cyan)), hsl(var(--wc-emerald)), hsl(var(--wc-gold)), hsl(var(--wc-cyan)));
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: gradient-rotate 4s linear infinite;
+  }
+
+  /* Scan Line Animation */
+  .scan-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scan-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(var(--wc-cyan)), transparent);
+    animation: scan 2s linear infinite;
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: hsl(var(--wc-navy-light));
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--wc-cyan) / 0.5);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--wc-cyan));
+  }
+}
+
+/* Keyframe Animations */
+@keyframes gradient-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes scan {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes border-flow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -100; }
+}

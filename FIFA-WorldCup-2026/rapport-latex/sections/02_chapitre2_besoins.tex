@@ -1,0 +1,415 @@
+% ============================================================================
+% CHAPITRE 2 : SPÉCIFICATION DES BESOINS
+% ============================================================================
+
+\chapter{Spécification des besoins}
+
+% ============================================================================
+% INTRODUCTION DU CHAPITRE
+% ============================================================================
+
+\section{Introduction}
+
+La spécification des besoins constitue une étape fondamentale dans tout projet de développement logiciel. Elle permet de formaliser les attentes des parties prenantes et de définir précisément le périmètre fonctionnel du système à concevoir. Cette phase d'analyse établit un référentiel commun entre les concepteurs et les utilisateurs finaux, réduisant ainsi les risques d'incompréhension et de divergence entre le produit livré et les besoins réels.
+
+Dans le cadre du projet FIFA World Cup 2026 – Unity Hub, la spécification des besoins revêt une importance particulière en raison de la criticité des fonctions de sécurité à implémenter. Nous devons garantir que les exigences en matière d'authentification forte, de contrôle d'accès multi-niveaux et de reconnaissance biométrique sont exhaustivement définies et correctement comprises.
+
+Ce chapitre présente successivement les acteurs interagissant avec le système, les besoins fonctionnels regroupés par domaine, les exigences non fonctionnelles, et enfin une description textuelle des principaux cas d'utilisation. Cette formalisation servira de base à la phase de conception présentée dans le chapitre suivant.
+
+% ============================================================================
+% IDENTIFICATION DES ACTEURS
+% ============================================================================
+
+\section{Identification des acteurs}
+
+L'identification des acteurs constitue le point de départ de l'analyse fonctionnelle. Un acteur représente toute entité externe — humaine ou système — interagissant avec l'application. Nous distinguons les acteurs primaires, qui utilisent directement les fonctionnalités du système, des acteurs secondaires, qui fournissent des services nécessaires au fonctionnement de l'application.
+
+\subsection{Acteurs primaires}
+
+\subsubsection{Visiteur}
+
+Le visiteur désigne tout utilisateur accédant à la plateforme sans être authentifié. Son périmètre d'interaction est limité aux fonctionnalités publiques du système.
+
+\begin{itemize}
+    \item \textbf{Rôle} : Utilisateur non authentifié découvrant la plateforme.
+    \item \textbf{Interactions principales} :
+    \begin{itemize}
+        \item Consulter la page d'accueil et les informations publiques.
+        \item Accéder au formulaire de connexion.
+        \item Initier une demande de création de compte.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Utilisateur authentifié}
+
+L'utilisateur authentifié représente une personne ayant validé le processus d'authentification multi-facteurs. Selon son niveau d'habilitation, il accède à un ensemble de ressources plus ou moins étendu.
+
+\begin{itemize}
+    \item \textbf{Rôle} : Utilisateur disposant d'un compte validé et de droits d'accès correspondant à son niveau.
+    \item \textbf{Interactions principales} :
+    \begin{itemize}
+        \item S'authentifier via le processus MFA (mot de passe, OTP, reconnaissance faciale).
+        \item Consulter les ressources autorisées selon son niveau d'accès.
+        \item Gérer son profil et ses paramètres de sécurité.
+        \item Enregistrer ses données biométriques (visage).
+        \item Consulter l'historique de ses connexions.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Administrateur}
+
+L'administrateur dispose de privilèges étendus lui permettant de gérer l'ensemble des utilisateurs, des ressources et des paramètres de sécurité du système.
+
+\begin{itemize}
+    \item \textbf{Rôle} : Responsable de la gestion et de la supervision de la plateforme.
+    \item \textbf{Interactions principales} :
+    \begin{itemize}
+        \item Gérer les comptes utilisateurs (création, modification, désactivation).
+        \item Attribuer et modifier les niveaux d'accès.
+        \item Configurer les ressources et leurs exigences d'authentification.
+        \item Consulter les journaux d'activité et les alertes de sécurité.
+        \item Définir les politiques de sécurité globales.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Acteurs secondaires}
+
+\subsubsection{Service OTP}
+
+Le service OTP représente le composant générant et validant les codes à usage unique dans le cadre de l'authentification multi-facteurs.
+
+\begin{itemize}
+    \item \textbf{Rôle} : Fournir un mécanisme de génération et de vérification de codes temporels.
+    \item \textbf{Interactions principales} :
+    \begin{itemize}
+        \item Générer un secret OTP lors de l'activation de la double authentification.
+        \item Valider les codes TOTP soumis par l'utilisateur.
+        \item Synchroniser les paramètres avec les applications tierces (Google Authenticator).
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Service Biométrie}
+
+Le service biométrie assure les fonctions de reconnaissance faciale, de l'enregistrement des caractéristiques biométriques jusqu'à leur vérification lors de l'authentification.
+
+\begin{itemize}
+    \item \textbf{Rôle} : Capturer, stocker et comparer les données biométriques faciales.
+    \item \textbf{Interactions principales} :
+    \begin{itemize}
+        \item Capturer et encoder les caractéristiques faciales lors de l'enrôlement.
+        \item Stocker les embeddings biométriques de manière sécurisée.
+        \item Comparer une capture en temps réel avec les données enregistrées.
+        \item Retourner un score de confiance au système principal.
+    \end{itemize}
+\end{itemize}
+
+% ============================================================================
+% BESOINS FONCTIONNELS
+% ============================================================================
+
+\section{Besoins fonctionnels}
+
+Les besoins fonctionnels décrivent les services que le système doit fournir aux utilisateurs. Nous les présentons par domaine fonctionnel, avec une numérotation permettant leur traçabilité tout au long du projet.
+
+\subsection{Authentification et gestion de session}
+
+\begin{description}
+    \item[BF1] \textbf{Authentification par identifiant et mot de passe} : Le système doit permettre à un utilisateur de s'authentifier en saisissant son adresse email et son mot de passe. Le mot de passe doit être vérifié contre une version hachée stockée en base de données.
+    
+    \item[BF2] \textbf{Gestion des sessions} : Le système doit créer une session utilisateur après authentification réussie, matérialisée par un token JWT. La durée de validité du token doit être configurable.
+    
+    \item[BF3] \textbf{Déconnexion} : Le système doit permettre à l'utilisateur de mettre fin à sa session de manière explicite, invalidant le token JWT associé.
+    
+    \item[BF4] \textbf{Récupération de mot de passe} : Le système doit proposer un mécanisme de réinitialisation de mot de passe via l'envoi d'un lien sécurisé à l'adresse email de l'utilisateur.
+\end{description}
+
+\subsection{Authentification multi-facteurs (MFA)}
+
+\begin{description}
+    \item[BF5] \textbf{Activation de l'authentification OTP} : Le système doit permettre à l'utilisateur d'activer l'authentification par code à usage unique, en générant un secret compatible avec les applications TOTP (Google Authenticator).
+    
+    \item[BF6] \textbf{Vérification du code OTP} : Lors de la connexion, si l'OTP est activé, le système doit demander la saisie d'un code temporel et vérifier sa validité avant d'accorder l'accès.
+    
+    \item[BF7] \textbf{Enrôlement biométrique} : Le système doit permettre à l'utilisateur d'enregistrer son visage via une capture photographique, dont les caractéristiques seront encodées et stockées.
+    
+    \item[BF8] \textbf{Vérification biométrique} : Le système doit permettre de valider l'identité de l'utilisateur par reconnaissance faciale en comparant une capture en temps réel avec les données biométriques enregistrées.
+    
+    \item[BF9] \textbf{Séquencement MFA adaptatif} : Le système doit déterminer dynamiquement les facteurs d'authentification requis en fonction du niveau de sensibilité des ressources sollicitées et du profil de risque de la connexion.
+\end{description}
+
+\subsection{Gestion des niveaux d'accès}
+
+\begin{description}
+    \item[BF10] \textbf{Définition des niveaux} : Le système doit supporter plusieurs niveaux d'accès hiérarchiques (LEVEL\_1, LEVEL\_2, LEVEL\_3, ADMIN), chacun associé à des exigences d'authentification spécifiques.
+    
+    \item[BF11] \textbf{Attribution des niveaux} : Le système doit permettre à un administrateur d'attribuer un niveau d'accès à chaque utilisateur.
+    
+    \item[BF12] \textbf{Modification des niveaux} : Le système doit permettre la modification du niveau d'accès d'un utilisateur, avec prise d'effet immédiate.
+    
+    \item[BF13] \textbf{Contrôle d'accès aux ressources} : Le système doit vérifier, pour chaque ressource sollicitée, que le niveau d'accès de l'utilisateur est suffisant.
+\end{description}
+
+\subsection{Gestion des ressources}
+
+\begin{description}
+    \item[BF14] \textbf{Catalogue des ressources} : Le système doit maintenir un catalogue des ressources accessibles, chacune associée à un niveau d'accès minimum requis.
+    
+    \item[BF15] \textbf{Affichage conditionnel} : Le système doit afficher à l'utilisateur uniquement les ressources correspondant à son niveau d'habilitation actuel.
+    
+    \item[BF16] \textbf{Administration des ressources} : Le système doit permettre à un administrateur d'ajouter, modifier ou supprimer des ressources du catalogue.
+\end{description}
+
+\subsection{Administration et supervision}
+
+\begin{description}
+    \item[BF17] \textbf{Gestion des utilisateurs} : Le système doit permettre à un administrateur de lister, créer, modifier et désactiver des comptes utilisateurs.
+    
+    \item[BF18] \textbf{Journalisation des accès} : Le système doit enregistrer l'ensemble des tentatives de connexion (réussies ou échouées), avec horodatage, adresse IP et résultat.
+    
+    \item[BF19] \textbf{Tableau de bord administrateur} : Le système doit fournir une interface de supervision présentant les statistiques clés (utilisateurs actifs, tentatives de connexion, alertes).
+    
+    \item[BF20] \textbf{Alertes de sécurité} : Le système doit générer des alertes en cas de comportements suspects (tentatives multiples échouées, connexion depuis une localisation inhabituelle).
+\end{description}
+
+% ============================================================================
+% BESOINS NON FONCTIONNELS
+% ============================================================================
+
+\section{Besoins non fonctionnels}
+
+Les besoins non fonctionnels définissent les caractéristiques qualitatives du système, indépendamment des fonctionnalités spécifiques. Ils constituent des critères d'acceptation transversaux.
+
+\subsection{Sécurité}
+
+\begin{description}
+    \item[BNF1] \textbf{Chiffrement des communications} : Toutes les communications entre le client et les serveurs doivent être chiffrées via HTTPS (TLS 1.2 ou supérieur).
+    
+    \item[BNF2] \textbf{Stockage sécurisé des mots de passe} : Les mots de passe doivent être hachés avec un algorithme robuste (bcrypt) avant stockage.
+    
+    \item[BNF3] \textbf{Protection des données biométriques} : Les embeddings biométriques doivent être chiffrés au repos et leur accès restreint aux seuls processus de vérification.
+    
+    \item[BNF4] \textbf{Protection contre les attaques courantes} : Le système doit être protégé contre les injections SQL, les attaques XSS et CSRF.
+    
+    \item[BNF5] \textbf{Limitation des tentatives} : Le système doit implémenter un mécanisme de verrouillage temporaire après un nombre configurable de tentatives d'authentification échouées.
+\end{description}
+
+\subsection{Performance}
+
+\begin{description}
+    \item[BNF6] \textbf{Temps de réponse} : Les opérations d'authentification standard doivent s'exécuter en moins de 2 secondes.
+    
+    \item[BNF7] \textbf{Temps de vérification biométrique} : La reconnaissance faciale doit produire un résultat en moins de 3 secondes.
+    
+    \item[BNF8] \textbf{Capacité de charge} : Le système doit supporter au minimum 100 utilisateurs simultanés sans dégradation notable des performances.
+\end{description}
+
+\subsection{Disponibilité et fiabilité}
+
+\begin{description}
+    \item[BNF9] \textbf{Taux de disponibilité} : Le système doit viser un taux de disponibilité de 99\% hors maintenance planifiée.
+    
+    \item[BNF10] \textbf{Tolérance aux pannes} : L'indisponibilité d'un service secondaire (biométrie) ne doit pas bloquer l'ensemble du processus d'authentification, mais proposer une alternative.
+    
+    \item[BNF11] \textbf{Sauvegarde des données} : Les données utilisateurs et journaux doivent faire l'objet de sauvegardes régulières.
+\end{description}
+
+\subsection{Évolutivité et maintenabilité}
+
+\begin{description}
+    \item[BNF12] \textbf{Architecture modulaire} : Le système doit être conçu de manière modulaire, permettant l'ajout de nouveaux facteurs d'authentification sans refonte majeure.
+    
+    \item[BNF13] \textbf{Documentation technique} : Le code source doit être documenté, et une documentation d'API doit être maintenue à jour.
+    
+    \item[BNF14] \textbf{Tests automatisés} : Les fonctionnalités critiques doivent être couvertes par des tests unitaires et d'intégration.
+\end{description}
+
+\subsection{Ergonomie}
+
+\begin{description}
+    \item[BNF15] \textbf{Interface intuitive} : L'interface utilisateur doit être claire et ne pas nécessiter de formation préalable pour les opérations courantes.
+    
+    \item[BNF16] \textbf{Retour visuel} : Le système doit fournir un retour visuel clair à chaque étape du processus d'authentification.
+    
+    \item[BNF17] \textbf{Accessibilité} : L'interface doit respecter les principes d'accessibilité (contraste suffisant, navigation clavier).
+    
+    \item[BNF18] \textbf{Responsive design} : L'application web doit s'adapter aux différentes tailles d'écran (desktop, tablette, mobile).
+\end{description}
+
+% ============================================================================
+% CAS D'UTILISATION
+% ============================================================================
+
+\section{Cas d'utilisation}
+
+Les cas d'utilisation décrivent les interactions entre les acteurs et le système pour atteindre un objectif spécifique. Nous présentons ici une description textuelle des cas d'utilisation principaux. Les diagrammes UML correspondants seront présentés dans le chapitre de conception.
+
+Les cas d’utilisation présentés ci-dessous illustrent les interactions principales entre les acteurs et le système dans des scénarios représentatifs.
+
+
+\subsection{CU1 : S'authentifier}
+
+\begin{description}
+    \item[Acteur principal] Visiteur
+    \item[Préconditions] L'utilisateur dispose d'un compte actif dans le système.
+    \item[Scénario nominal] ~
+    \begin{enumerate}
+        \item Le visiteur accède à la page de connexion.
+        \item Le visiteur saisit son adresse email et son mot de passe.
+        \item Le système vérifie les identifiants.
+        \item Le système détermine les facteurs MFA requis selon le niveau de l'utilisateur.
+        \item Si OTP requis : le système demande le code, l'utilisateur le saisit, le système vérifie.
+        \item Si biométrie requise : le système demande une capture faciale, l'utilisateur se positionne, le système vérifie.
+        \item Le système génère un token JWT et redirige vers le tableau de bord.
+    \end{enumerate}
+    \item[Scénarios alternatifs] ~
+    \begin{itemize}
+        \item Identifiants incorrects : le système affiche un message d'erreur et incrémente le compteur de tentatives.
+        \item Code OTP invalide : le système demande une nouvelle saisie.
+        \item Reconnaissance faciale échouée : le système propose une nouvelle tentative ou une méthode alternative.
+    \end{itemize}
+    \item[Postconditions] L'utilisateur est authentifié et dispose d'une session active.
+\end{description}
+
+\subsection{CU2 : Enregistrer son visage}
+
+\begin{description}
+    \item[Acteur principal] Utilisateur authentifié
+    \item[Préconditions] L'utilisateur est connecté et n'a pas encore enregistré de données biométriques.
+    \item[Scénario nominal] ~
+    \begin{enumerate}
+        \item L'utilisateur accède à la section de gestion de profil.
+        \item L'utilisateur sélectionne l'option d'enregistrement biométrique.
+        \item Le système active la caméra et affiche un aperçu.
+        \item L'utilisateur positionne son visage dans le cadre indiqué.
+        \item Le système capture l'image et extrait les caractéristiques faciales.
+        \item Le système stocke les embeddings biométriques.
+        \item Le système confirme l'enregistrement réussi.
+    \end{enumerate}
+    \item[Scénarios alternatifs] ~
+    \begin{itemize}
+        \item Qualité insuffisante : le système demande une nouvelle capture.
+        \item Visage non détecté : le système affiche des instructions de positionnement.
+    \end{itemize}
+    \item[Postconditions] Les données biométriques de l'utilisateur sont enregistrées.
+\end{description}
+
+\subsection{CU3 : Accéder à une ressource protégée}
+
+\begin{description}
+    \item[Acteur principal] Utilisateur authentifié
+    \item[Préconditions] L'utilisateur dispose d'une session active.
+    \item[Scénario nominal] ~
+    \begin{enumerate}
+        \item L'utilisateur consulte le catalogue des ressources.
+        \item L'utilisateur sélectionne une ressource.
+        \item Le système vérifie le niveau d'accès de l'utilisateur.
+        \item Le système affiche le contenu de la ressource.
+    \end{enumerate}
+    \item[Scénarios alternatifs] ~
+    \begin{itemize}
+        \item Niveau insuffisant : le système affiche un message indiquant le niveau requis.
+    \end{itemize}
+    \item[Postconditions] L'utilisateur a consulté la ressource demandée.
+\end{description}
+
+\subsection{CU4 : Gérer les utilisateurs}
+
+\begin{description}
+    \item[Acteur principal] Administrateur
+    \item[Préconditions] L'administrateur est authentifié avec les privilèges appropriés.
+    \item[Scénario nominal] ~
+    \begin{enumerate}
+        \item L'administrateur accède au panneau de gestion des utilisateurs.
+        \item L'administrateur consulte la liste des utilisateurs.
+        \item L'administrateur sélectionne un utilisateur.
+        \item L'administrateur modifie les attributs (niveau d'accès, statut).
+        \item Le système enregistre les modifications.
+        \item Le système confirme la mise à jour.
+    \end{enumerate}
+    \item[Scénarios alternatifs] ~
+    \begin{itemize}
+        \item Création d'utilisateur : l'administrateur remplit le formulaire de création.
+        \item Désactivation : l'administrateur change le statut à inactif.
+    \end{itemize}
+    \item[Postconditions] Les modifications sont effectives immédiatement.
+\end{description}
+
+\subsection{CU5 : Configurer l'authentification OTP}
+
+\begin{description}
+    \item[Acteur principal] Utilisateur authentifié
+    \item[Préconditions] L'utilisateur est connecté et l'OTP n'est pas encore activé.
+    \item[Scénario nominal] ~
+    \begin{enumerate}
+        \item L'utilisateur accède aux paramètres de sécurité.
+        \item L'utilisateur sélectionne l'activation de l'OTP.
+        \item Le système génère un secret et affiche un QR code.
+        \item L'utilisateur scanne le QR code avec Google Authenticator.
+        \item L'utilisateur saisit le code affiché par l'application pour confirmer.
+        \item Le système valide et active l'authentification OTP.
+    \end{enumerate}
+    \item[Scénarios alternatifs] ~
+    \begin{itemize}
+        \item Code de confirmation invalide : le système demande une nouvelle tentative.
+    \end{itemize}
+    \item[Postconditions] L'authentification OTP est activée pour l'utilisateur.
+\end{description}
+
+\subsection{CU6 : Consulter les journaux d'activité}
+
+\begin{description}
+    \item[Acteur principal] Administrateur
+    \item[Préconditions] L'administrateur est authentifié.
+    \item[Scénario nominal] ~
+    \begin{enumerate}
+        \item L'administrateur accède à la section des journaux.
+        \item Le système affiche les événements récents.
+        \item L'administrateur applique des filtres (date, utilisateur, type d'événement).
+        \item Le système affiche les résultats filtrés.
+    \end{enumerate}
+    \item[Postconditions] L'administrateur a consulté les journaux souhaités.
+\end{description}
+
+% ============================================================================
+% DIAGRAMMES DE CAS D'UTILISATION
+% ============================================================================
+
+\section{Diagrammes de cas d'utilisation}
+
+Les diagrammes de cas d'utilisation offrent une représentation graphique synthétique des interactions entre les acteurs et le système. Ils permettent de visualiser l'ensemble des fonctionnalités offertes et leur accessibilité selon les profils utilisateurs.
+
+\subsection{Diagramme de cas d'utilisation global}
+
+Le diagramme de cas d'utilisation global présenté en figure \ref{fig:usecase_global} illustre l'ensemble des fonctionnalités du système et les acteurs qui y accèdent.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{uml/usecase_global}
+    \caption{Diagramme de cas d'utilisation global du système}
+    \label{fig:usecase_global}
+\end{figure}
+
+Ce diagramme met en évidence la répartition des fonctionnalités entre les différents acteurs. Le visiteur peut accéder aux informations publiques et initier une connexion. L'utilisateur authentifié dispose des fonctionnalités de gestion de profil, de configuration MFA et d'accès aux ressources selon son niveau. L'administrateur bénéficie de privilèges étendus pour la gestion des utilisateurs et la supervision du système.
+
+\subsection{Diagramme de cas d'utilisation MFA}
+
+Le diagramme présenté en figure \ref{fig:usecase_mfa} détaille spécifiquement les cas d'utilisation liés au processus d'authentification multi-facteurs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{uml/usecase_mfa}
+    \caption{Diagramme de cas d'utilisation : Authentification multi-facteurs}
+    \label{fig:usecase_mfa}
+\end{figure}
+
+Ce diagramme illustre les différentes étapes et options du processus MFA : authentification par mot de passe, validation OTP, vérification biométrique, ainsi que les interactions avec les services secondaires (Service OTP et Service Biométrie). Il met en évidence les relations d'inclusion et d'extension entre les cas d'utilisation.
+
+% ============================================================================
+% CONCLUSION DU CHAPITRE
+% ============================================================================
+
+\section{Conclusion}
+
+Ce chapitre a permis de formaliser l'ensemble des exigences du système FIFA World Cup 2026 – Unity Hub. Nous avons identifié cinq acteurs principaux et secondaires, chacun caractérisé par son rôle et ses interactions avec la plateforme. Les vingt besoins fonctionnels définis couvrent les domaines de l'authentification, de la gestion MFA, du contrôle d'accès multi-niveaux, de l'administration des ressources et de la supervision. Les dix-huit besoins non fonctionnels établissent les critères de qualité attendus en matière de sécurité, de performance, de disponibilité, d'évolutivité et d'ergonomie.
+
+La description textuelle des six cas d'utilisation principaux fournit une vision concrète des interactions entre utilisateurs et système. Ces spécifications constituent le socle sur lequel reposera la phase de conception, présentée dans le chapitre suivant, où nous modéliserons la structure et le comportement du système à l'aide des diagrammes UML.

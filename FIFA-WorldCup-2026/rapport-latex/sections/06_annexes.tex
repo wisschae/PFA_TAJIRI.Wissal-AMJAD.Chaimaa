@@ -1,0 +1,237 @@
+% ============================================================================
+% ANNEXES
+% ============================================================================
+
+\chapter*{Annexes}
+\addcontentsline{toc}{chapter}{Annexes}
+\markboth{Annexes}{Annexes}
+
+Ce document annexe regroupe des éléments complémentaires au rapport principal : table des acronymes utilisés, extraits techniques illustratifs et récapitulatifs de référence.
+
+% ============================================================================
+% ANNEXE A1 : TABLE DES ACRONYMES
+% ============================================================================
+
+\section*{A1 – Table des acronymes}
+\addcontentsline{toc}{section}{A1 – Table des acronymes}
+
+Le tableau \ref{tab:acronymes} récapitule les principaux acronymes et abréviations utilisés tout au long de ce rapport.
+
+\begin{table}[H]
+\centering
+\caption{Table des acronymes}
+\label{tab:acronymes}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Acronyme} & \textbf{Signification} \\
+\hline
+API & Application Programming Interface (Interface de programmation applicative) \\
+\hline
+CORS & Cross-Origin Resource Sharing (Partage de ressources entre origines) \\
+\hline
+CSRF & Cross-Site Request Forgery (Falsification de requête intersite) \\
+\hline
+JWT & JSON Web Token (Jeton Web JSON) \\
+\hline
+MFA & Multi-Factor Authentication (Authentification multi-facteurs) \\
+\hline
+OTP & One-Time Password (Mot de passe à usage unique) \\
+\hline
+RBAC & Role-Based Access Control (Contrôle d'accès basé sur les rôles) \\
+\hline
+REST & Representational State Transfer (Transfert d'état représentationnel) \\
+\hline
+RGPD & Règlement Général sur la Protection des Données \\
+\hline
+TLS & Transport Layer Security (Sécurité de la couche transport) \\
+\hline
+TOTP & Time-based One-Time Password (Mot de passe temporel à usage unique) \\
+\hline
+UML & Unified Modeling Language (Langage de modélisation unifié) \\
+\hline
+XSS & Cross-Site Scripting (Script intersite) \\
+\hline
+\end{tabular}
+\end{table}
+
+% ============================================================================
+% ANNEXE A2 : EXTRAITS TECHNIQUES
+% ============================================================================
+
+\section*{A2 – Extraits techniques illustratifs}
+\addcontentsline{toc}{section}{A2 – Extraits techniques illustratifs}
+
+Cette section présente des extraits de code simplifiés illustrant les mécanismes clés du système. Ces extraits sont fournis à titre pédagogique et ne représentent pas le code de production dans son intégralité.
+
+\subsection*{A2.1 – Configuration Spring Security (extrait simplifié)}
+
+L'extrait suivant illustre la configuration de base de Spring Security pour la gestion des filtres JWT et la protection des endpoints.
+
+\begin{lstlisting}[language=Java, caption={Configuration Spring Security pour JWT}, label={lst:spring_security}]
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) 
+            throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfig()))
+            .sessionManagement(session -> 
+                session.sessionCreationPolicy(STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated())
+            .addFilterBefore(jwtAuthFilter, 
+                UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+}
+\end{lstlisting}
+
+\subsection*{A2.2 – Structure du payload JWT}
+
+Le jeton JWT généré après authentification complète contient les claims essentiels
+présentés ci-dessous.
+
+\begin{samepage}
+\begin{lstlisting}[language=Java, caption={Structure du payload JWT}, label={lst:jwt_payload}]
+{
+  "sub": "user@example.com",
+  "userId": 42,
+  "accessLevel": "LEVEL_2",
+  "mfaCompleted": true,
+  "validatedFactors": ["PASSWORD", "OTP"],
+  "roles": ["USER"],
+  "iat": 1735750000,
+  "exp": 1735753600
+}
+\end{lstlisting}
+\end{samepage}
+
+\subsection*{A2.3 – Configuration des exigences MFA par niveau}
+
+L'extrait suivant illustre, sous forme de pseudo-configuration YAML, la correspondance entre les niveaux d'accès et les facteurs MFA requis.
+
+\begin{lstlisting}[language=Java, caption={Exigences MFA par niveau d'accès}, label={lst:mfa_config}]
+access-levels:
+  LEVEL_1:
+    label: "Acces basique"
+    required-factors:
+      - PASSWORD
+      
+  LEVEL_2:
+    label: "Acces etendu"
+    required-factors:
+      - PASSWORD
+      - OTP
+      
+  LEVEL_3:
+    label: "Acces sensible"
+    required-factors:
+      - PASSWORD
+      - OTP
+      - FACE_RECOGNITION
+      
+  ADMIN:
+    label: "Administration"
+    required-factors:
+      - PASSWORD
+      - OTP
+      - FACE_RECOGNITION
+\end{lstlisting}
+
+% ============================================================================
+% ANNEXE A3 : ENDPOINTS PRINCIPAUX
+% ============================================================================
+
+\section*{A3 – Endpoints API principaux}
+\addcontentsline{toc}{section}{A3 – Endpoints API principaux}
+
+Le tableau \ref{tab:endpoints} récapitule les principaux endpoints exposés par l'API backend.
+
+\begin{table}[H]
+\centering
+\caption{Endpoints API principaux}
+\label{tab:endpoints}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Méthode} & \textbf{Endpoint} & \textbf{Description} \\
+\hline
+POST & /api/auth/login & Authentification (email + mot de passe) \\
+\hline
+POST & /api/auth/logout & Déconnexion et invalidation du token \\
+\hline
+POST & /api/mfa/verify-otp & Validation du code OTP \\
+\hline
+POST & /api/mfa/verify-face & Vérification biométrique faciale \\
+\hline
+GET & /api/mfa/status & Statut de la session MFA en cours \\
+\hline
+POST & /api/otp/setup & Génération du secret OTP (QR code) \\
+\hline
+POST & /api/otp/confirm & Confirmation de l'activation OTP \\
+\hline
+GET & /api/users/me & Profil de l'utilisateur connecté \\
+\hline
+GET & /api/resources & Liste des ressources accessibles \\
+\hline
+GET & /api/resources/\{id\} & Accès à une ressource spécifique \\
+\hline
+GET & /api/admin/users & Liste des utilisateurs (admin) \\
+\hline
+PUT & /api/admin/users/\{id\}/level & Modification du niveau d'accès \\
+\hline
+GET & /api/admin/logs & Consultation des journaux d'accès \\
+\hline
+\end{tabular}
+\end{table}
+
+% ============================================================================
+% ANNEXE A4 : CHECKLIST SÉCURITÉ
+% ============================================================================
+
+\section*{A4 – Checklist de conformité sécurité}
+\addcontentsline{toc}{section}{A4 – Checklist de conformité sécurité}
+
+Le tableau \ref{tab:checklist_secu} présente une checklist des mesures de sécurité implémentées ou recommandées pour le système.
+
+\begin{table}[H]
+\centering
+\caption{Checklist de conformité sécurité}
+\label{tab:checklist_secu}
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Mesure} & \textbf{Statut} & \textbf{Remarque} \\
+\hline
+Communications HTTPS (TLS 1.2+) & \checkmark & Obligatoire en production \\
+\hline
+Hachage des mots de passe (bcrypt) & \checkmark & Facteur de coût $\geq$ 10 \\
+\hline
+Tokens JWT signés (HS256/RS256) & \checkmark & Clé secrète rotative \\
+\hline
+Expiration des tokens (TTL) & \checkmark & 1h par défaut \\
+\hline
+Protection CSRF désactivée (API stateless) & \checkmark & Justifié par JWT \\
+\hline
+Politique CORS restrictive & \checkmark & Origines whitelist \\
+\hline
+Rate limiting sur /auth/login & \checkmark & 5 tentatives / minute \\
+\hline
+Verrouillage temporaire après échecs & \checkmark & 15 min après 5 échecs \\
+\hline
+Journalisation des accès (AccessLog) & \checkmark & Horodatage, IP, résultat \\
+\hline
+Chiffrement des embeddings biométriques & $\circ$ & Recommandé \\
+\hline
+Rotation automatique des clés JWT & $\circ$ & À implémenter \\
+\hline
+Audit de sécurité externe & $\circ$ & Recommandé avant prod \\
+\hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+\noindent \textbf{Légende :} \checkmark = Implémenté \quad $\circ$ = Recommandé / À implémenter

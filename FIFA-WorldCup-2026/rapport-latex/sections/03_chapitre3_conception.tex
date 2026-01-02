@@ -1,0 +1,322 @@
+% ============================================================================
+% CHAPITRE 3 : CONCEPTION DU SYSTÈME
+% ============================================================================
+
+\chapter{Conception du système}
+
+% ============================================================================
+% INTRODUCTION DU CHAPITRE
+% ============================================================================
+
+\section{Introduction}
+
+La phase de conception constitue une étape charnière dans le cycle de développement logiciel, assurant la transition entre l'expression des besoins et leur implémentation technique. Elle vise à définir l'architecture du système, à modéliser son comportement dynamique et sa structure statique, et à établir les fondations sur lesquelles reposera la phase de réalisation.
+
+Dans le cadre du projet FIFA World Cup 2026 – Unity Hub, la conception revêt une importance particulière en raison de la complexité des mécanismes de sécurité à implémenter. L'authentification multi-facteurs, la reconnaissance biométrique et la gestion granulaire des niveaux d'accès nécessitent une modélisation rigoureuse garantissant la cohérence et la robustesse du système final.
+
+Ce chapitre présente successivement la démarche de conception adoptée, la modélisation dynamique à travers les diagrammes de séquence UML, la modélisation statique via le diagramme de classes, et enfin l'architecture logicielle et matérielle retenue. Cette formalisation s'appuie sur les spécifications établies au chapitre précédent et prépare la phase de réalisation détaillée dans le chapitre suivant.
+
+% ============================================================================
+% VUE GLOBALE DE LA CONCEPTION
+% ============================================================================
+
+\section{Vue globale de la conception}
+
+La conception du système FIFA World Cup 2026 – Unity Hub s'inscrit dans une démarche structurée, guidée par les principes de modularité, de séparation des préoccupations et de réutilisabilité. Nous avons adopté une approche orientée objet, conformément aux pratiques actuelles de l'ingénierie logicielle.
+
+\subsection{Démarche de conception adoptée}
+
+Notre démarche de conception repose sur le formalisme UML (Unified Modeling Language), standard de facto pour la modélisation des systèmes orientés objet. Ce langage graphique permet de représenter différentes perspectives du système à travers des diagrammes complémentaires, facilitant la communication entre les membres de l'équipe et la validation des choix architecturaux.
+
+Nous distinguons deux types de modélisation :
+
+\begin{itemize}
+    \item \textbf{Modélisation dynamique} : elle décrit le comportement du système dans le temps, les interactions entre objets et les séquences d'opérations. Les diagrammes de séquence constituent l'outil privilégié pour cette modélisation.
+    
+    \item \textbf{Modélisation statique} : elle représente la structure du système, les classes qui le composent, leurs attributs, leurs méthodes et les relations qui les unissent. Le diagramme de classes en constitue la pièce maîtresse.
+\end{itemize}
+
+\subsection{Découpage du système en composants}
+
+L'architecture du système s'articule autour de trois composants principaux, reflétant une séparation claire des responsabilités :
+
+\begin{enumerate}
+    \item \textbf{Composant Frontend} : responsable de l'interface utilisateur, de la capture des interactions et de la présentation des informations. Ce composant communique avec le backend via des appels API REST.
+    
+    \item \textbf{Composant Backend} : cœur métier du système, il gère l'authentification, le contrôle d'accès, la gestion des utilisateurs et la coordination des différents services. Il expose une API RESTful sécurisée.
+    
+    \item \textbf{Composant Biométrie} : service spécialisé dans la reconnaissance faciale, isolé pour des raisons de performance et de maintenabilité. Il fournit des services d'enrôlement et de vérification des caractéristiques biométriques.
+\end{enumerate}
+
+Cette organisation en composants faiblement couplés favorise l'évolutivité du système et permet une maintenance ciblée de chaque module.
+
+% ============================================================================
+% MODÉLISATION DYNAMIQUE
+% ============================================================================
+
+\section{Modélisation dynamique}
+
+La modélisation dynamique permet de représenter le comportement du système au fil du temps, en illustrant les échanges de messages entre les différents acteurs et composants. Les diagrammes de séquence UML constituent un outil privilégié pour cette représentation, car ils mettent en évidence l'ordre chronologique des interactions et les conditions de branchement.
+
+\subsection{Diagramme de séquence : Authentification et décision MFA}
+
+Le processus d'authentification constitue le cas d'utilisation central du système. La figure \ref{fig:seq_login_mfa} illustre le flux complet d'authentification, depuis la saisie des identifiants jusqu'à la décision concernant les facteurs MFA requis.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{uml/seq_login_mfa}
+    \caption{Diagramme de séquence : Authentification et décision MFA}
+    \label{fig:seq_login_mfa}
+\end{figure}
+
+Ce diagramme met en évidence le séquencement des opérations lors de la connexion. L'utilisateur soumet ses identifiants au frontend, qui les transmet au backend. Après vérification des credentials, le backend détermine le niveau d'accès de l'utilisateur et évalue les facteurs MFA requis. Selon le niveau, le système peut exiger une validation OTP, une vérification biométrique, ou les deux. Cette logique adaptative constitue un élément différenciant de notre solution.
+
+\subsection{Diagramme de séquence : Validation MFA via OTP}
+
+La validation par code à usage unique représente un facteur d'authentification essentiel pour les niveaux d'accès intermédiaires et élevés. La figure \ref{fig:seq_otp_validation} détaille les échanges lors de cette validation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{uml/seq_validation_mfa}
+    \caption{Diagramme de séquence : Validation MFA via OTP}
+    \label{fig:seq_otp_validation}
+\end{figure}
+
+Le processus débute par l'affichage d'un formulaire de saisie du code OTP. L'utilisateur consulte son application d'authentification (Google Authenticator), saisit le code temporel et le soumet. Le backend vérifie la validité du code en recalculant la valeur attendue à partir du secret partagé et de l'horodatage actuel. En cas de succès, la session MFA est mise à jour avec la validation de ce facteur.
+
+\subsection{Diagramme de séquence : Configuration OTP}
+
+L'activation de l'authentification OTP par l'utilisateur constitue une opération sensible nécessitant une génération sécurisée du secret partagé. La figure \ref{fig:seq_otp_setup} présente ce processus de configuration.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{uml/seq_otp_setup}
+    \caption{Diagramme de séquence : Configuration de l'authentification OTP}
+    \label{fig:seq_otp_setup}
+\end{figure}
+
+L'utilisateur initie la configuration depuis son profil. Le backend génère un secret cryptographique aléatoire et le formate en URI compatible avec le standard TOTP. Cette URI est encodée sous forme de QR code et transmise au frontend pour affichage. L'utilisateur scanne ce QR code avec son application d'authentification, puis saisit un premier code pour confirmer la synchronisation. Une fois validé, le secret est associé au compte utilisateur et l'authentification OTP est activée.
+
+\subsection{Diagramme de séquence : Accès refusé à une ressource}
+
+Le contrôle d'accès aux ressources protégées constitue une fonction critique du système. La figure \ref{fig:seq_access_denied} illustre le scénario où un utilisateur tente d'accéder à une ressource requérant un niveau d'habilitation supérieur au sien.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{uml/seq_acces_refuse}
+    \caption{Diagramme de séquence : Accès refusé à une ressource protégée}
+    \label{fig:seq_access_denied}
+\end{figure}
+
+Ce diagramme montre la vérification effectuée par le backend lors de chaque tentative d'accès à une ressource. Le système compare le niveau d'accès de l'utilisateur authentifié avec le niveau minimum requis par la ressource. Si l'utilisateur ne dispose pas des habilitations suffisantes, un message d'erreur explicite est retourné, indiquant le niveau requis. Cet événement est par ailleurs journalisé pour permettre une traçabilité complète des tentatives d'accès.
+
+% ============================================================================
+% MODÉLISATION STATIQUE
+% ============================================================================
+
+\section{Modélisation statique}
+
+La modélisation statique vise à représenter la structure du système indépendamment de son comportement temporel. Le diagramme de classes constitue l'outil central de cette modélisation, définissant les entités du domaine, leurs attributs, leurs méthodes et les relations qui les lient.
+
+\subsection{Présentation du diagramme de classes}
+
+Le diagramme de classes présenté en figure \ref{fig:class_diagram} offre une vue d'ensemble des principales entités du système et de leurs interconnexions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{uml/diagramme_classes}
+    \caption{Diagramme de classes global du système}
+    \label{fig:class_diagram}
+\end{figure}
+
+Ce diagramme met en évidence l'organisation structurelle du système autour de plusieurs classes clés que nous détaillons ci-après.
+
+\subsection{Description des principales classes}
+
+\subsubsection{Classe User}
+
+La classe \texttt{User} représente un utilisateur du système. Elle encapsule les informations d'identification (email, mot de passe haché), le niveau d'accès attribué, et les références vers les données MFA associées. Cette classe constitue le pivot central du modèle, étant référencée par la plupart des autres entités.
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : id, email, passwordHash, accessLevel, isActive, createdAt
+    \item \textbf{Relations} : composition avec OtpConfig, association avec BiometricData, agrégation avec MfaSession
+\end{itemize}
+
+\subsubsection{Classe AccessLevel}
+
+La classe \texttt{AccessLevel} modélise les différents niveaux d'habilitation du système. Chaque niveau est caractérisé par un identifiant, un libellé descriptif et la liste des facteurs MFA requis pour y accéder.
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : levelCode, label, requiredMfaFactors, priority
+    \item \textbf{Relations} : association avec User, association avec Resource
+\end{itemize}
+
+\subsubsection{Classe Resource}
+
+La classe \texttt{Resource} représente une ressource protégée du système. Chaque ressource est associée à un niveau d'accès minimum requis, définissant ainsi les conditions d'habilitation nécessaires pour y accéder.
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : id, name, description, resourceType, requiredAccessLevel
+    \item \textbf{Relations} : association avec AccessLevel
+\end{itemize}
+
+\subsubsection{Classe MfaSession}
+
+La classe \texttt{MfaSession} modélise une session d'authentification multi-facteurs en cours. Elle trace les facteurs déjà validés, l'horodatage de chaque validation et le statut global de la session.
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : sessionId, userId, validatedFactors, createdAt, expiresAt, isComplete
+    \item \textbf{Relations} : association avec User
+\end{itemize}
+
+\subsubsection{Classe OtpConfig}
+
+La classe \texttt{OtpConfig} encapsule la configuration OTP d'un utilisateur, notamment le secret partagé et l'état d'activation.
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : secret, isEnabled, activatedAt
+    \item \textbf{Relations} : composition avec User
+\end{itemize}
+
+\subsubsection{Classe BiometricData}
+
+La classe \texttt{BiometricData} stocke les données biométriques faciales d'un utilisateur sous forme d'embeddings (vecteurs de caractéristiques).
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : embedding, capturedAt, isActive
+    \item \textbf{Relations} : association avec User
+\end{itemize}
+
+\subsubsection{Classe AccessLog}
+
+La classe \texttt{AccessLog} assure la journalisation des événements d'accès, permettant l'audit et la détection d'anomalies.
+
+\begin{itemize}
+    \item \textbf{Attributs principaux} : logId, userId, eventType, timestamp, ipAddress, success, details
+    \item \textbf{Relations} : association avec User
+\end{itemize}
+
+\subsection{Relations entre classes}
+
+Le diagramme met en évidence plusieurs types de relations structurant le modèle :
+
+\begin{itemize}
+    \item \textbf{Composition} : la relation entre User et OtpConfig indique que la configuration OTP n'existe pas indépendamment de l'utilisateur.
+    
+    \item \textbf{Association} : les relations entre User et Resource, ou entre User et AccessLog, représentent des liens sémantiques sans dépendance existentielle.
+    
+    \item \textbf{Extension future} : bien que non représentée dans ce diagramme, la conception permet une évolution vers une hiérarchie de rôles plus complexe.
+\end{itemize}
+
+% ============================================================================
+% ARCHITECTURE DU SYSTÈME
+% ============================================================================
+
+\section{Architecture du système}
+
+L'architecture du système définit l'organisation des composants logiciels et matériels, leurs interactions et les technologies utilisées. Nous présentons successivement l'architecture logicielle et l'architecture matérielle de déploiement.
+
+\subsection{Architecture logicielle}
+
+L'architecture logicielle du système FIFA World Cup 2026 – Unity Hub repose sur une organisation en couches et en services, favorisant la modularité et la maintenabilité. La figure \ref{fig:architecture_logicielle} présente cette organisation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{architecture/architecture_logicielle}
+    \caption{Architecture logicielle du système}
+    \label{fig:architecture_logicielle}
+\end{figure}
+
+Cette architecture s'organise autour de trois blocs principaux interconnectés :
+
+\subsubsection{Frontend (React + TypeScript)}
+
+Le frontend constitue la couche de présentation du système. Développé avec React et TypeScript, il offre une interface utilisateur réactive et typée. Les principales responsabilités incluent :
+
+\begin{itemize}
+    \item Affichage des interfaces d'authentification et de navigation
+    \item Capture des interactions utilisateur et des données biométriques
+    \item Communication avec le backend via des appels API REST
+    \item Gestion de l'état applicatif côté client
+\end{itemize}
+
+Le choix de React se justifie par sa popularité, sa maturité et son écosystème riche. TypeScript apporte la sécurité du typage statique, réduisant les erreurs à l'exécution.
+
+\subsubsection{Backend (Spring Boot)}
+
+Le backend constitue le cœur métier du système. Développé avec Spring Boot (Java 17), il implémente la logique d'authentification, de gestion des utilisateurs et de contrôle d'accès. Son architecture interne suit le pattern MVC adapté aux API REST :
+
+\begin{itemize}
+    \item \textbf{Couche Controller} : exposition des endpoints REST, validation des entrées
+    \item \textbf{Couche Service} : logique métier, orchestration des opérations
+    \item \textbf{Couche Repository} : accès aux données via JPA/Hibernate
+    \item \textbf{Couche Security} : gestion des tokens JWT, filtres de sécurité
+\end{itemize}
+
+Spring Boot a été choisi pour sa robustesse, son intégration native avec Spring Security et la richesse de son écosystème.
+
+\subsubsection{Service Biométrie (FastAPI + Python)}
+
+Le service de reconnaissance faciale est isolé en un microservice autonome, développé avec FastAPI (Python). Cette séparation se justifie par :
+
+\begin{itemize}
+    \item La spécificité des traitements d'intelligence artificielle (TensorFlow, OpenCV)
+    \item Les besoins en ressources différents des autres composants
+    \item La possibilité de faire évoluer ce service indépendamment
+\end{itemize}
+
+Ce service expose deux endpoints principaux : enrôlement (calcul et stockage des embeddings) et vérification (comparaison d'un visage capturé avec les données enregistrées).
+
+\subsection{Architecture matérielle}
+
+L'architecture matérielle décrit l'organisation physique du déploiement, les nœuds d'exécution et les protocoles de communication. La figure \ref{fig:architecture_materielle} présente cette organisation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{architecture/architecture_materielle}
+    \caption{Architecture matérielle de déploiement}
+    \label{fig:architecture_materielle}
+\end{figure}
+
+L'architecture de déploiement s'articule autour des nœuds suivants :
+
+\subsubsection{Poste client}
+
+Le poste client exécute un navigateur web moderne accédant à l'application frontend. Les prérequis incluent une connexion internet stable et, pour les fonctions biométriques, une caméra accessible via l'API WebRTC du navigateur.
+
+\subsubsection{Serveur Frontend}
+
+Le serveur frontend héberge l'application React buildée sous forme de ressources statiques. Un serveur web (Nginx) assure la distribution de ces ressources et le routage des requêtes API vers le backend.
+
+\subsubsection{Serveur Backend}
+
+Le serveur backend exécute l'application Spring Boot. Il communique avec la base de données pour la persistance des informations utilisateurs et avec le service biométrie pour les opérations de reconnaissance faciale.
+
+\subsubsection{Serveur Biométrie}
+
+Le serveur biométrie héberge le service FastAPI. Il peut être dimensionné indépendamment pour absorber la charge des traitements d'intelligence artificielle, qui sont plus coûteux en ressources que les opérations classiques.
+
+\subsubsection{Serveur Base de données}
+
+Le serveur de base de données héberge le SGBD (H2 en développement, PostgreSQL en production). Il assure la persistance des données utilisateurs, des configurations MFA, des ressources et des journaux d'accès.
+
+\subsection{Protocoles et sécurisation des échanges}
+
+Les communications entre composants respectent les principes de sécurité suivants :
+
+\begin{itemize}
+    \item \textbf{HTTPS} : toutes les communications client-serveur sont chiffrées via TLS
+    \item \textbf{JWT} : les tokens d'authentification sont signés et vérifiés à chaque requête
+    \item \textbf{CORS} : la politique CORS restreint les origines autorisées
+    \item \textbf{Réseau interne} : les communications backend-biométrie transitent par un réseau privé
+\end{itemize}
+
+% ============================================================================
+% CONCLUSION DU CHAPITRE
+% ============================================================================
+
+\section{Conclusion}
+
+Ce chapitre a présenté la conception du système FIFA World Cup 2026 – Unity Hub à travers ses dimensions dynamique, statique et architecturale. La modélisation UML a permis de formaliser les principaux mécanismes d’authentification multi-facteurs et de contrôle d’accès, en mettant en évidence les interactions clés entre les différents composants du système.
+
+Le diagramme de classes a structuré les entités centrales du domaine et leurs relations, tandis que les architectures logicielle et matérielle retenues assurent modularité, évolutivité et sécurité. Ces choix de conception constituent une base solide pour la phase de réalisation, présentée dans le chapitre suivant.
